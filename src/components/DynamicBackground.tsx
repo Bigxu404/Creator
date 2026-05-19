@@ -30,7 +30,7 @@ function CharacterModel() {
       object={scene} 
       position={[0, -1, 0]} // 调整模型高度，让它正好“坐”在地上
       scale={2} // 根据你的模型大小，这里可以动态调节缩放
-      rotation={[0, -Math.PI / 8, 0]} // 稍微侧一点身子
+      rotation={[0, 0, 0]} // 正向面对前方
     />
   );
 }
@@ -49,7 +49,7 @@ function CampfireModel() {
   return (
     <primitive 
       object={scene} 
-      position={[0.8, -0.8, 1.5]} // 放置在人物面向的前方
+      position={[0, -0.8, 1.5]} // 放置在人物正前方
       scale={2} // 放大篝火模型
     />
   );
@@ -87,7 +87,7 @@ function CampfireLight() {
   });
 
   return (
-    <group position={[0.8, -0.2, 1.5]}>
+    <group position={[0, -0.2, 1.5]}>
       <pointLight 
         ref={lightRef} 
         color="#ff5500" 
@@ -125,10 +125,8 @@ function Scene() {
         <CharacterModel />
         <CampfireModel />
 
-        {/* 漂浮的萤火虫/火星粒子 - 更加茂密和旺盛 */}
-        <Sparkles count={200} scale={4} size={3} speed={0.8} opacity={0.8} color="#ff8800" position={[0.8, 0, 1.5]} noise={2} />
-        {/* 外围的稀疏萤火虫 */}
-        <Sparkles count={50} scale={10} size={1.5} speed={0.2} opacity={0.3} color="#a5b4fc" position={[0, 1, 0]} />
+        {/* 局部的火星粒子，仅限篝火上方和周围 */}
+        <Sparkles count={100} scale={1.5} size={2.5} speed={0.8} opacity={0.8} color="#ff8800" position={[0, 0.2, 1.5]} noise={2} />
       </group>
 
       {/* 真实的接触阴影，让场景更扎实 */}
