@@ -147,8 +147,8 @@ function Scene() {
 export function DynamicBackground() {
   return (
     <div className="fixed inset-0 z-[-1]">
-      <Canvas shadows camera={{ position: [-4, 2, 6], fov: 45 }}>
-        <SoftShadows size={15} samples={16} />
+      <Canvas shadows="basic" camera={{ position: [-4, 2, 6], fov: 45 }}>
+        {/* Temporarily remove SoftShadows until the WebGL issue is resolved */}
         
         <Suspense fallback={null}>
           <Scene />
