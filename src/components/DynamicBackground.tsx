@@ -35,6 +35,26 @@ function CharacterModel() {
   );
 }
 
+// 渲染新的 3D 篝火模型
+function CampfireModel() {
+  const { scene } = useGLTF("/models/campfire.glb");
+  
+  scene.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+
+  return (
+    <primitive 
+      object={scene} 
+      position={[1.5, -0.6, 1]} // 放置在之前篝火的位置
+      scale={1.5} // 根据实际情况可能需要调整缩放
+    />
+  );
+}
+
 // 构建低多边形风格的露营地台
 function CampsiteBase() {
   return (
@@ -51,28 +71,6 @@ function CampsiteBase() {
           <meshStandardMaterial color="#3e2723" roughness={1} />
         </mesh>
       </Float>
-
-      {/* 篝火基座石头 */}
-      <mesh receiveShadow position={[1.5, 0.1, 1]}>
-        <cylinderGeometry args={[0.4, 0.5, 0.1, 8]} />
-        <meshStandardMaterial color="#757575" roughness={0.9} />
-      </mesh>
-      
-      {/* 柴火 */}
-      <group position={[1.5, 0.2, 1]}>
-        <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.6, 8]} />
-          <meshStandardMaterial color="#4e342e" />
-        </mesh>
-        <mesh castShadow rotation={[0, Math.PI / 3, Math.PI / 2]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.6, 8]} />
-          <meshStandardMaterial color="#4e342e" />
-        </mesh>
-        <mesh castShadow rotation={[0, -Math.PI / 3, Math.PI / 2]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.6, 8]} />
-          <meshStandardMaterial color="#4e342e" />
-        </mesh>
-      </group>
     </group>
   );
 }
@@ -98,11 +96,6 @@ function CampfireLight() {
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0001}
       />
-      {/* 模拟火焰的简单几何体 */}
-      <mesh position={[0, 0.3, 0]}>
-        <coneGeometry args={[0.2, 0.5, 5]} />
-        <meshBasicMaterial color="#ff9900" transparent opacity={0.6} />
-      </mesh>
     </group>
   );
 }
@@ -130,6 +123,7 @@ function Scene() {
         
         {/* 注入你的真实模型 */}
         <CharacterModel />
+        <CampfireModel />
 
         {/* 漂浮的萤火虫/火星粒子 */}
         <Sparkles count={50} scale={6} size={2} speed={0.4} opacity={0.3} color="#ffb74d" position={[1.5, 0, 1]} />
@@ -169,3 +163,4 @@ export function DynamicBackground() {
 }
 
 useGLTF.preload("/models/character.glb");
+useGLTF.preload("/models/campfire.glb");
