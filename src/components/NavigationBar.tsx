@@ -17,7 +17,7 @@ export function NavigationBar() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50">
       <nav className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
         {tabs.map((tab) => {
           const isActive = pathname === tab.path || (pathname.startsWith(tab.path) && tab.path !== "/");
