@@ -1,22 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NavigationBar } from "@/components/NavigationBar";
-import { DynamicBackground } from "@/components/DynamicBackground";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Digital Garden | Personal OS",
-  description: "A Context Intersection Hub & Digital Garden",
+  title: "Campsite Diorama | 3D Space",
+  description: "A 3D camping scene using Three.js",
 };
 
 export default function RootLayout({
@@ -25,13 +12,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-transparent text-white selection:bg-white/30 min-h-screen`}
-      >
-        <DynamicBackground />
+    <html lang="zh-CN">
+      <body className="bg-black text-white m-0 p-0 overflow-hidden w-screen h-screen">
         {children}
-        <NavigationBar />
       </body>
     </html>
   );
