@@ -49,8 +49,8 @@ function CampfireModel() {
   return (
     <primitive 
       object={scene} 
-      position={[1.5, -0.6, 1]} // 放置在之前篝火的位置
-      scale={1.5} // 根据实际情况可能需要调整缩放
+      position={[0.8, -0.8, 1.5]} // 放置在人物面向的前方
+      scale={2} // 放大篝火模型
     />
   );
 }
@@ -81,17 +81,17 @@ function CampfireLight() {
   
   useFrame(({ clock }) => {
     if (lightRef.current) {
-      // 模拟火焰跳动的效果
-      lightRef.current.intensity = 2 + Math.sin(clock.elapsedTime * 8) * 0.5 + Math.random() * 0.2;
+      // 更强烈和温暖的火焰跳动效果
+      lightRef.current.intensity = 3 + Math.sin(clock.elapsedTime * 12) * 0.8 + Math.random() * 0.4;
     }
   });
 
   return (
-    <group position={[1.5, -0.5, 1]}>
+    <group position={[0.8, -0.2, 1.5]}>
       <pointLight 
         ref={lightRef} 
-        color="#ff7b00" 
-        distance={10} 
+        color="#ff5500" 
+        distance={15} 
         castShadow 
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0001}
@@ -105,13 +105,13 @@ function Scene() {
     <>
       <color attach="background" args={['#050505']} />
       
-      {/* 极夜环境光照 */}
-      <ambientLight intensity={0.1} />
+      {/* 极夜环境光照 - 稍微提亮并加入暖色调 */}
+      <ambientLight intensity={0.2} color="#ffedd5" />
       
-      {/* 模拟冷色调的月光 */}
+      {/* 模拟冷色调的月光作为对比 */}
       <directionalLight 
         position={[-5, 8, -5]} 
-        intensity={0.3} 
+        intensity={0.2} 
         color="#a5b4fc" 
         castShadow 
         shadow-mapSize={[2048, 2048]} 
@@ -125,8 +125,10 @@ function Scene() {
         <CharacterModel />
         <CampfireModel />
 
-        {/* 漂浮的萤火虫/火星粒子 */}
-        <Sparkles count={50} scale={6} size={2} speed={0.4} opacity={0.3} color="#ffb74d" position={[1.5, 0, 1]} />
+        {/* 漂浮的萤火虫/火星粒子 - 更加茂密和旺盛 */}
+        <Sparkles count={200} scale={4} size={3} speed={0.8} opacity={0.8} color="#ff8800" position={[0.8, 0, 1.5]} noise={2} />
+        {/* 外围的稀疏萤火虫 */}
+        <Sparkles count={50} scale={10} size={1.5} speed={0.2} opacity={0.3} color="#a5b4fc" position={[0, 1, 0]} />
       </group>
 
       {/* 真实的接触阴影，让场景更扎实 */}
