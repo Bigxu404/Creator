@@ -156,7 +156,7 @@ function Scene() {
 
 export function DynamicBackground() {
   return (
-    <div className="fixed inset-0 z-[-1]">
+    <div className="fixed inset-0 z-0 pointer-events-auto">
       <Canvas shadows="basic" camera={{ position: [-4, 2, 6], fov: 45 }}>
         {/* Temporarily remove SoftShadows until the WebGL issue is resolved */}
         
@@ -165,7 +165,10 @@ export function DynamicBackground() {
         </Suspense>
         
         <OrbitControls 
+          makeDefault
           enablePan={true}
+          enableRotate={true}
+          enableZoom={true}
           autoRotate={false}
           minPolarAngle={Math.PI / 6} 
           maxPolarAngle={Math.PI / 2.1} 

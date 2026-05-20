@@ -14,7 +14,10 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className="bg-black text-white m-0 p-0 overflow-hidden w-screen h-screen">
-        {children}
+        <DynamicBackground />
+        <div className="relative z-10 pointer-events-none">
+          {children}
+        </div>
       </body>
     </html>
   );
