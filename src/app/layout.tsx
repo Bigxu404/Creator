@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { DynamicBackground } from "@/components/DynamicBackground";
 
 export const metadata: Metadata = {
   title: "Campsite Diorama | 3D Space",
