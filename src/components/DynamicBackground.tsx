@@ -49,7 +49,7 @@ function CampfireModel() {
   return (
     <primitive 
       object={scene} 
-      position={[0, -0.8, 1.5]} // 放置在人物正前方
+      position={[0, -0.9, 1.5]} // 稍微下移篝火使其完美贴合
       scale={2} // 放大篝火模型
     />
   );
@@ -69,8 +69,8 @@ function GrassModel() {
   return (
     <primitive 
       object={scene} 
-      position={[0, -1.05, 0]} // 稍微垫底一点点，让人和火刚好坐在上面
-      scale={3.5} // 根据实际草坪大小调整
+      position={[0, -1.2, 0]} // 将草地继续下移，使其顶层与人物底部（y=-1）贴合
+      scale={[8, 3.5, 8]} // 保持高度 (Y: 3.5) 不变，大幅拉长左右和前后 (X, Z: 8) 的长度
     />
   );
 }
@@ -120,7 +120,7 @@ function CampfireLight() {
   });
 
   return (
-    <group position={[0, -0.6, 1.5]}>
+    <group position={[0, -0.7, 1.5]}>
       {/* 动态光源 */}
       <pointLight 
         ref={lightRef} 
@@ -158,7 +158,7 @@ function CampfireLight() {
 // 更真实的篝火火星粒子系统
 function CampfireSparkles() {
   return (
-    <group position={[0, -0.6, 1.5]}>
+    <group position={[0, -0.7, 1.5]}>
       {/* 底部剧烈燃烧层：紧贴木柴，数量极大，范围极小，速度快 */}
       <Sparkles count={150} scale={[0.8, 0.4, 0.8]} size={2.5} speed={1.5} opacity={0.9} color="#ff6600" position={[0, 0.2, 0]} noise={10} />
       
