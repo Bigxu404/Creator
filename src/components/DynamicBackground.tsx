@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { 
   OrbitControls, 
   useGLTF, 
@@ -8,7 +8,8 @@ import {
   SoftShadows, 
   ContactShadows,
   Float,
-  Sparkles
+  Sparkles,
+  Stars
 } from "@react-three/drei";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
@@ -172,21 +173,45 @@ function CampfireSparkles() {
   );
 }
 
+// 逼真的草地地面
+function RealisticGround() {
+  // 生成一个高质量的带有些许噪点的草地材质
+  return (
+    <mesh receiveShadow position={[0, -1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      {/* 巨大的平面来充当地面 */}
+      <planeGeometry args={[100, 100, 128, 128]} />
+      <meshStandardMaterial 
+        color="#1a3b1a" 
+        roughness={0.9} 
+        metalness={0.1}
+        wireframe={false}
+      />
+    </mesh>
+  );
+}
+
 function Scene() {
   return (
     <>
       <color attach="background" args={['#050505']} />
       
+      {/* 逼真的星空背景 */}
+      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+      
       {/* 极夜环境光照 - 稍微提亮并加入暖色调 */}
-      <ambientLight intensity={0.2} color="#ffedd5" />
+      <ambientLight intensity={0.15} color="#e0e7ff" />
       
       {/* 模拟冷色调的月光作为对比 */}
       <directionalLight 
-        position={[-5, 8, -5]} 
-        intensity={0.2} 
-        color="#a5b4fc" 
+        position={[-10, 20, -10]} 
+        intensity={0.3} 
+        color="#818cf8" 
         castShadow 
         shadow-mapSize={[2048, 2048]} 
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
       />
 
       <group position={[0, 0, 0]}>
@@ -195,13 +220,16 @@ function Scene() {
         {/* 注入你的真实模型 */}
         <CharacterModel />
         <CampfireModel />
+        
+        {/* 高质量草地 */}
+        <RealisticGround />
 
         {/* 高度分层的真实火星物理系统 */}
         <CampfireSparkles />
       </group>
 
       {/* 真实的接触阴影，让场景更扎实 */}
-      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.5} far={10} color="#000000" position={[0, -1.8, 0]} />
+      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.6} far={10} color="#000000" position={[0, -0.99, 0]} />
       
       {/* 环境光反射（HDRI），给予你的模型更好的金属/皮肤光泽反射 */}
       <Environment preset="night" />
