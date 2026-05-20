@@ -125,8 +125,11 @@ function Scene() {
         <CharacterModel />
         <CampfireModel />
 
-        {/* 局部的火星粒子，仅限篝火上方和周围 */}
-        <Sparkles count={100} scale={1.5} size={2.5} speed={0.8} opacity={0.8} color="#ff8800" position={[0, 0.2, 1.5]} noise={2} />
+        {/* 局部的火星粒子，仅限篝火上方和周围。分为两层以模拟下多上少的不规则物理效果 */}
+        {/* 底部密集层：数量多，速度快，范围小 */}
+        <Sparkles count={150} scale={[1.2, 0.5, 1.2]} size={3} speed={1.2} opacity={0.9} color="#ff8800" position={[0, 0, 1.5]} noise={3} />
+        {/* 顶部稀疏层：数量少，速度慢，漂浮范围广 */}
+        <Sparkles count={30} scale={[1.8, 2.5, 1.8]} size={1.5} speed={0.5} opacity={0.6} color="#ffcc80" position={[0, 0.8, 1.5]} noise={1} />
       </group>
 
       {/* 真实的接触阴影，让场景更扎实 */}
@@ -150,8 +153,7 @@ export function DynamicBackground() {
         
         <OrbitControls 
           enablePan={false}
-          autoRotate 
-          autoRotateSpeed={0.3}
+          autoRotate={false}
           minPolarAngle={Math.PI / 4} 
           maxPolarAngle={Math.PI / 2.1} 
           minDistance={4} 
