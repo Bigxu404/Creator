@@ -153,16 +153,16 @@ function CampfireLight() {
       <pointLight 
         ref={lightRef} 
         color="#ff4400" 
-        distance={25} // 增大照亮半径，使草地和周围完全被篝火笼罩
+        distance={45} // 大幅提升照亮半径 (从25提升到45)，使大片草坪被营火光辉温柔笼罩
         castShadow 
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0001}
       />
-      {/* 篝火基座的额外微弱恒定光源，烘托草地表面的暖色底蕴 */}
+      {/* 篝火基座的额外恒定光源，烘托草地表面的暖色底蕴 */}
       <pointLight
         color="#ff7700"
-        intensity={2.5} // 增强基础发光亮度，确保篝火底座及周边的草地被大范围暖色照亮
-        distance={10}   // 扩大基础暖光的地面照亮范围，形成真实的近亮远暗衰减
+        intensity={3.5} // 增强基础发光亮度 (从2.5提升到3.5)
+        distance={25}   // 大幅扩大恒定暖光衰减范围 (从10提升到25)，烘托更深远处的地表暖调
         position={[0, 0.2, 0]}
       />
       
