@@ -31,7 +31,7 @@ function CharacterModel() {
       object={scene} 
       position={[0, -1, 0]} // 调整模型高度，让它正好“坐”在地上
       scale={2} // 根据你的模型大小，这里可以动态调节缩放
-      rotation={[0, 0, 0]} // 正向面对前方
+      rotation={[0, 0.4, 0]} // 面向前方，但稍微右倾 20 度，极具呼吸感的构图
     />
   );
 }
@@ -276,28 +276,29 @@ function Scene() {
       
       {/* 绚丽超现实动漫星云粒子系统（泼墨质感、高对比度霓虹撞色） */}
       <group rotation={[Math.PI / 12, Math.PI / 6, 0]}>
-        {/* 底层闪烁霓虹粉色暗星 */}
-        <Stars radius={130} depth={50} count={6000} factor={3} saturation={0.9} fade speed={1.0} />
+        {/* 底层闪烁霓虹粉色暗星：大幅减少星星数量，使其更有呼吸感、干净透亮 */}
+        <Stars radius={130} depth={50} count={3500} factor={2} saturation={0.8} fade speed={0.8} />
         {/* 中层闪烁霓虹青蓝色亮星 */}
-        <Stars radius={90} depth={50} count={3000} factor={6} saturation={1.0} fade speed={1.5} />
+        <Stars radius={90} depth={50} count={1200} factor={4} saturation={0.9} fade speed={1.2} />
         
         {/* 
           超现实抽象笔触与泼墨质感：
           使用精心着色、分层、高饱和度的霓虹 Sparkles 云团，来堆叠出有如新海诚动漫般绚烂而又带有泼墨斑驳纹理的星空。
+          这里也大幅度精简了 Sparkles 粒子的数量，让漫天云雾不过度喧宾夺主，保持画面的极简和空灵。
         */}
         {/* 1. 玫红色 (Magenta/Pink) 抽象泼墨星云带 - 集中在左上方 */}
-        <Sparkles count={250} scale={[30, 15, 30]} size={6} speed={0.15} opacity={0.8} color="#ff007f" position={[-10, 15, -12]} />
-        <Sparkles count={150} scale={[20, 8, 20]} size={10} speed={0.08} opacity={0.6} color="#d946ef" position={[-8, 12, -15]} />
+        <Sparkles count={80} scale={[30, 15, 30]} size={5} speed={0.12} opacity={0.65} color="#ff007f" position={[-10, 15, -12]} />
+        <Sparkles count={45} scale={[20, 8, 20]} size={8} speed={0.06} opacity={0.5} color="#d946ef" position={[-8, 12, -15]} />
         
         {/* 2. 青蓝色 (Cyan/Teal) 霓虹撞色星云带 - 集中在右下方与远景 */}
-        <Sparkles count={250} scale={[35, 18, 35]} size={5} speed={0.18} opacity={0.75} color="#00f0ff" position={[12, 6, -18]} />
-        <Sparkles count={150} scale={[25, 10, 25]} size={8} speed={0.1} opacity={0.55} color="#06b6d4" position={[10, 4, -20]} />
+        <Sparkles count={80} scale={[35, 18, 35]} size={4} speed={0.15} opacity={0.6} color="#00f0ff" position={[12, 6, -18]} />
+        <Sparkles count={45} scale={[25, 10, 25]} size={6} speed={0.08} opacity={0.45} color="#06b6d4" position={[10, 4, -20]} />
 
         {/* 3. 霓虹撞色核心交汇区 (青蓝与玫红的浪漫融合，产生极具张力的紫色晕染) */}
-        <Sparkles count={120} scale={[15, 15, 15]} size={12} speed={0.25} opacity={0.9} color="#a855f7" position={[1, 10, -10]} />
+        <Sparkles count={40} scale={[15, 15, 15]} size={10} speed={0.2} opacity={0.7} color="#a855f7" position={[1, 10, -10]} />
         
         {/* 4. 抽象纯白泼墨星尘粒子，用最慢的微光闪烁，突出电影级梦幻空气感 */}
-        <Sparkles count={80} scale={[40, 40, 40]} size={4} speed={0.05} opacity={0.4} color="#ffffff" position={[0, 5, -25]} />
+        <Sparkles count={25} scale={[40, 40, 40]} size={3} speed={0.04} opacity={0.3} color="#ffffff" position={[0, 5, -25]} />
       </group>
       
       {/* 电影级光影调整：极夜环境光微弱提亮，但融入强烈的青蓝色调 */}
@@ -316,7 +317,7 @@ function Scene() {
         shadow-camera-bottom={-10}
       />
 
-      <group position={[1.5, 0, 0]}>
+      <group position={[2.5, 0, 0]}>
         <CampfireLight />
         
         {/* 注入你的真实模型 */}
@@ -330,8 +331,8 @@ function Scene() {
         <CampfireSparkles />
       </group>
 
-      {/* 真实的接触阴影，让场景更扎实 (平移至右侧 position x=1.5) */}
-      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.6} far={10} color="#000000" position={[1.5, -0.99, 0]} />
+      {/* 真实的接触阴影，让场景更扎实 (平移至右侧 position x=2.5) */}
+      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.6} far={10} color="#000000" position={[2.5, -0.99, 0]} />
       
       {/* 环境光反射（HDRI），给予你的模型更好的金属/皮肤光泽反射 */}
       <Environment preset="night" />
@@ -351,12 +352,11 @@ export function DynamicBackground() {
         这里在根容器上，注入了动漫电影级的青蓝色（左上）到极暗紫黑色（中），再到玫红色（右下）的超现实霓虹高饱和渐变。
         Canvas 此时背景为透明，令此 CSS 渐变作为天空底纹透上来。
         
-        将 camera target 稍微往右平移（通过平移 camera position 的 x 轴和 OrbitControls target，
-        或者直接通过 group 的 x 轴平移来让画面自然地偏移到屏幕右半部分）。
-        这里我们将 camera 的 position 设为 [-2.5, 2, 6]，相比之前的 [-4, 2, 6] 略微右偏，
-        并让整个场景的 group 往 x=1.5 移动，这样可以给左侧留出绝佳的空间来展示你的文字和 UI 菜单！
+        为了给左侧菜单留出更纯净、更宽广的“黄金自叙展示区”，我们将整个 3D 模型场景（人物、营火、球形地表）
+        向右平移至 x=2.5。相机的初始焦点 position 与控制器 OrbitControls 的 target 同步右移对齐，
+        使整个 3D 旋转以这个平移后的右侧营火为绝对轴心！
       */}
-      <Canvas shadows="basic" camera={{ position: [-2.5, 2, 6], fov: 45 }}>
+      <Canvas shadows="basic" camera={{ position: [-1.5, 2, 6], fov: 45 }}>
         {/* Temporarily remove SoftShadows until the WebGL issue is resolved */}
         
         <Suspense fallback={null}>
@@ -373,7 +373,7 @@ export function DynamicBackground() {
           maxPolarAngle={Math.PI / 2.1} 
           minDistance={2} 
           maxDistance={20} 
-          target={[1.5, -0.5, 0]} // 让 OrbitControls 的旋转中心也对齐右偏的营火场景中心(1.5, -0.5, 0)
+          target={[2.5, -0.5, 0]} // 让 OrbitControls 的旋转中心也对齐进一步右偏的营火场景中心(2.5, -0.5, 0)
         />
       </Canvas>
     </div>
