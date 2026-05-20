@@ -211,14 +211,14 @@ function RealisticGround() {
   return (
     <group position={[0, -1, 0]}>
       {/* 绿色的微型小星球草地 */}
-      <mesh receiveShadow position={[0, -6, 0]}>
+      <mesh receiveShadow position={[0, -12, 0]}>
         {/* 
-          使用更大的球体 Geometry (Sphere) 充当微型小行星，使其直径大约是整个屏幕的宽度，弧线更柔和。
-          球体半径设为 6，高度细分拉满 (128, 128) 确保极其完美的弧线。
-          位置 y=-6，这样球体的顶端弧面正好切在 y=0 处，
-          让人（坐高y=-1）和篝火（y=-0.9）完美、自然地立在更大更震撼的小星球的最顶端。
+          将球体直径进一步放大至 12.0（半径12.0），使其更加平缓宏大，从而令篝火和人几乎可以说是“贴在球体表面上”。
+          球体半径设为 12，高度细分保持在 128 确保极致完美的弧线。
+          位置 y=-12，这样球体的顶端弧面正好极为精细地切在 y=0 处，
+          让人（坐高y=-1）和篝火（y=-0.9）能够完美、极其稳定、平滑地贴在巨大行星的地表最顶端。
         */}
-        <sphereGeometry args={[6, 128, 128]} />
+        <sphereGeometry args={[12, 128, 128]} />
         <meshStandardMaterial 
           color="#152b15" // 带有深邃感和神秘感的暗冷草地色
           roughness={0.92} 
@@ -304,7 +304,7 @@ function Scene() {
         shadow-camera-bottom={-10}
       />
 
-      <group position={[0, 0, 0]}>
+      <group position={[1.5, 0, 0]}>
         <CampfireLight />
         
         {/* 注入你的真实模型 */}
@@ -318,8 +318,8 @@ function Scene() {
         <CampfireSparkles />
       </group>
 
-      {/* 真实的接触阴影，让场景更扎实 */}
-      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.6} far={10} color="#000000" position={[0, -0.99, 0]} />
+      {/* 真实的接触阴影，让场景更扎实 (平移至右侧 position x=1.5) */}
+      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.6} far={10} color="#000000" position={[1.5, -0.99, 0]} />
       
       {/* 环境光反射（HDRI），给予你的模型更好的金属/皮肤光泽反射 */}
       <Environment preset="night" />
@@ -330,7 +330,13 @@ function Scene() {
 export function DynamicBackground() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-auto">
-      <Canvas shadows="basic" camera={{ position: [-4, 2, 6], fov: 45 }}>
+      {/* 
+        将 camera target 稍微往右平移（通过平移 camera position 的 x 轴和 OrbitControls target，
+        或者直接通过 group 的 x 轴平移来让画面自然地偏移到屏幕右半部分）。
+        这里我们将 camera 的 position 设为 [-2.5, 2, 6]，相比之前的 [-4, 2, 6] 略微右偏，
+        并让整个场景的 group 往 x=1.5 移动，这样可以给左侧留出绝佳的空间来展示你的文字和 UI 菜单！
+      */}
+      <Canvas shadows="basic" camera={{ position: [-2.5, 2, 6], fov: 45 }}>
         {/* Temporarily remove SoftShadows until the WebGL issue is resolved */}
         
         <Suspense fallback={null}>
@@ -347,6 +353,7 @@ export function DynamicBackground() {
           maxPolarAngle={Math.PI / 2.1} 
           minDistance={2} 
           maxDistance={20} 
+          target={[1.5, -0.5, 0]} // 让 OrbitControls 的旋转中心也对齐右偏的营火场景中心(1.5, -0.5, 0)
         />
       </Canvas>
     </div>
