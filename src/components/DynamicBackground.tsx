@@ -100,6 +100,22 @@ function CampfireLight() {
   );
 }
 
+// 更真实的篝火火星粒子系统
+function CampfireSparkles() {
+  return (
+    <group position={[0, -0.6, 1.5]}>
+      {/* 底部剧烈燃烧层：紧贴木柴，数量极大，范围极小，速度快 */}
+      <Sparkles count={150} scale={[0.8, 0.4, 0.8]} size={2.5} speed={1.5} opacity={0.9} color="#ff6600" position={[0, 0.2, 0]} noise={10} />
+      
+      {/* 中部上升层：数量减半，范围变宽，速度中等 */}
+      <Sparkles count={60} scale={[1.2, 1.2, 1.2]} size={2} speed={0.8} opacity={0.7} color="#ff8800" position={[0, 0.8, 0]} noise={8} />
+      
+      {/* 顶部消散层：数量极少，范围很宽，速度慢，准备消散在空气中 */}
+      <Sparkles count={20} scale={[2.0, 2.5, 2.0]} size={1} speed={0.3} opacity={0.4} color="#ffcc80" position={[0, 1.8, 0]} noise={5} />
+    </group>
+  );
+}
+
 function Scene() {
   return (
     <>
@@ -125,11 +141,8 @@ function Scene() {
         <CharacterModel />
         <CampfireModel />
 
-        {/* 局部的火星粒子，仅限篝火上方和周围。分为两层以模拟下多上少的不规则物理效果 */}
-        {/* 底部密集层：数量多，速度快，范围小 */}
-        <Sparkles count={150} scale={[1.2, 0.5, 1.2]} size={3} speed={1.2} opacity={0.9} color="#ff8800" position={[0, 0, 1.5]} noise={3} />
-        {/* 顶部稀疏层：数量少，速度慢，漂浮范围广 */}
-        <Sparkles count={30} scale={[1.8, 2.5, 1.8]} size={1.5} speed={0.5} opacity={0.6} color="#ffcc80" position={[0, 0.8, 1.5]} noise={1} />
+        {/* 高度分层的真实火星物理系统 */}
+        <CampfireSparkles />
       </group>
 
       {/* 真实的接触阴影，让场景更扎实 */}
