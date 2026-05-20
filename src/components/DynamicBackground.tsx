@@ -101,63 +101,72 @@ function CampfireLight() {
     const t = clock.elapsedTime;
     
     if (lightRef.current) {
-      // 篝火光照跳动
-      lightRef.current.intensity = 4 + Math.sin(t * 12) * 1.5 + Math.random() * 0.8;
+      // 篝火光照大幅增强并更剧烈晃动
+      lightRef.current.intensity = 5 + Math.sin(t * 14) * 2 + Math.random() * 1.2;
+      // 让光源位置轻微晃动，模拟火苗跳动导致影子晃动的物理效果
+      lightRef.current.position.x = Math.sin(t * 10) * 0.15;
+      lightRef.current.position.z = Math.cos(t * 8) * 0.15;
     }
     
-    // 1. 让整个火苗群组产生“S型”曲线波动（模拟风吹和热气流波动）
+    // 1. 让整个火苗群组产生更大幅度、更自然的“S型”有机曲线波动（使用贝塞尔风和二次方噪声模拟）
     if (flameGroupRef.current) {
-      flameGroupRef.current.rotation.z = Math.sin(t * 4) * 0.08; // 左右柔和摇摆
-      flameGroupRef.current.rotation.x = Math.cos(t * 3) * 0.05; // 前后柔和摇摆
+      flameGroupRef.current.rotation.z = Math.sin(t * 3.5) * 0.12 + Math.cos(t * 7) * 0.04; 
+      flameGroupRef.current.rotation.x = Math.cos(t * 2.8) * 0.08 + Math.sin(t * 5.5) * 0.03; 
     }
 
-    // 2. 动画化火苗（高度起伏，带有非线性的呼吸感）
+    // 2. 更加不规则的火苗缩放与起伏，带出呼吸和热流腾空感
     if (flameRef1.current) {
-      flameRef1.current.scale.y = 1.4 + Math.sin(t * 8) * 0.25;
-      flameRef1.current.scale.x = 1.1 + Math.cos(t * 6) * 0.1;
-      flameRef1.current.scale.z = 1.1 + Math.sin(t * 7) * 0.1;
+      flameRef1.current.scale.y = 1.5 + Math.sin(t * 6) * 0.35 + Math.cos(t * 11) * 0.1;
+      flameRef1.current.scale.x = 1.1 + Math.cos(t * 4) * 0.15;
+      flameRef1.current.scale.z = 1.1 + Math.sin(t * 5.2) * 0.15;
     }
     if (flameRef2.current) {
-      flameRef2.current.scale.y = 1.2 + Math.cos(t * 10) * 0.3;
-      // 引入正弦曲线偏移，使中层火苗产生扭动感
-      flameRef2.current.position.x = Math.sin(t * 6) * 0.04;
-      flameRef2.current.position.z = Math.cos(t * 5) * 0.04;
+      flameRef2.current.scale.y = 1.3 + Math.cos(t * 9) * 0.45;
+      flameRef2.current.position.x = Math.sin(t * 5) * 0.08;
+      flameRef2.current.position.z = Math.cos(t * 4.2) * 0.08;
     }
     if (flameRef3.current) {
-      flameRef3.current.scale.y = 1.0 + Math.sin(t * 14) * 0.15;
-      flameRef3.current.position.x = -Math.sin(t * 8) * 0.02;
+      flameRef3.current.scale.y = 1.1 + Math.sin(t * 12) * 0.25;
+      flameRef3.current.position.x = -Math.sin(t * 7) * 0.05;
     }
   });
 
   return (
     <group position={[0, -0.7, 1.5]}>
-      {/* 动态光源 */}
+      {/* 动态光源 - 照亮地面和角色周围环境 */}
       <pointLight 
         ref={lightRef} 
-        color="#ff5500" 
-        distance={20} 
+        color="#ff4400" 
+        distance={25} // 增大照亮半径，使草地和周围完全被篝火笼罩
         castShadow 
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0001}
       />
+      {/* 篝火基座的额外微弱恒定光源，烘托草地表面的暖色底蕴 */}
+      <pointLight
+        color="#ff7700"
+        intensity={1.5}
+        distance={6}
+        position={[0, 0.1, 0]}
+      />
       
       {/* 动态火苗群组 (Procedural Wave Flames) */}
       <group ref={flameGroupRef} position={[0, 0.6, 0]}>
-        {/* 外层大火苗（半透明深橙色） */}
+        {/* 外层大火苗（半透明深橙红色，更飘逸） */}
         <mesh ref={flameRef1} position={[0, 0, 0]}>
-          <coneGeometry args={[0.45, 1.2, 16]} />
-          <meshBasicMaterial color="#ff3300" transparent opacity={0.5} blending={THREE.AdditiveBlending} depthWrite={false} />
+          <coneGeometry args={[0.5, 1.3, 16]} />
+          <meshBasicMaterial color="#ff2200" transparent opacity={0.5} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
         {/* 中层火苗（明亮的暖橙黄色） */}
         <mesh ref={flameRef2} position={[0, -0.1, 0]}>
-          <coneGeometry args={[0.3, 0.9, 16]} />
-          <meshBasicMaterial color="#ff8800" transparent opacity={0.7} blending={THREE.AdditiveBlending} depthWrite={false} />
+          <coneGeometry args={[0.32, 1.0, 16]} />
+          <meshBasicMaterial color="#ff8800" transparent opacity={0.75} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
-        {/* 内核火苗（极度亮黄高温核心） */}
+        {/* 内核火苗（极度亮黄高温核心，高对比度） */}
         <mesh ref={flameRef3} position={[0, -0.2, 0]}>
-          <coneGeometry args={[0.15, 0.6, 16]} />
+          <coneGeometry args={[0.16, 0.7, 16]} />
           <meshBasicMaterial color="#ffea00" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
       </group>
@@ -183,54 +192,86 @@ function CampfireSparkles() {
 
 // 逼真的草地地面
 function RealisticGround() {
-  // 增加草坪的起伏感（不平整性），并且撒上一些碎石/杂草的小碎点
   return (
     <group position={[0, -1, 0]}>
       {/* 巨大的草地主平面 */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[100, 100, 128, 128]} />
+        <planeGeometry args={[120, 120, 128, 128]} />
         <meshStandardMaterial 
-          color="#1e351b" // 稍微深一点的暗草绿
-          roughness={0.9} 
-          metalness={0.02}
+          color="#152b15" // 带有深邃感和神秘感的暗冷草地色
+          roughness={0.92} 
+          metalness={0.01}
         />
       </mesh>
       
-      {/* 随机散落的一些“草丛”和“小石头”小凸起，避免光秃秃 */}
+      {/* 随机散落的草丛、鲜花和萤火虫（让地表充满细节） */}
       <group position={[0, 0, 0]}>
-        {/* 角色周围的小草堆1 */}
+        {/* 周围的杂草堆 - 增加了低多边形小碎草，提高自然生态感 */}
         <mesh position={[-0.8, 0.05, -0.3]} castShadow>
-          <coneGeometry args={[0.08, 0.15, 4]} />
-          <meshStandardMaterial color="#2d4d2d" roughness={1} />
+          <coneGeometry args={[0.08, 0.18, 4]} />
+          <meshStandardMaterial color="#2d5a2d" roughness={1} />
         </mesh>
         <mesh position={[-0.7, 0.08, -0.4]} castShadow>
-          <coneGeometry args={[0.06, 0.2, 4]} />
-          <meshStandardMaterial color="#355e35" roughness={1} />
+          <coneGeometry args={[0.06, 0.24, 4]} />
+          <meshStandardMaterial color="#3d6e3d" roughness={1} />
+        </mesh>
+        <mesh position={[-1.2, 0.06, 0.2]} castShadow>
+          <coneGeometry args={[0.07, 0.16, 4]} />
+          <meshStandardMaterial color="#2d5a2d" roughness={1} />
         </mesh>
         
-        {/* 篝火旁边的草堆2 */}
-        <mesh position={[0.7, 0.05, 0.8]} castShadow>
-          <coneGeometry args={[0.1, 0.18, 4]} />
-          <meshStandardMaterial color="#2d4d2d" roughness={1} />
+        {/* 篝火旁边的暖色小鲜花 */}
+        <group position={[0.8, 0.05, 0.8]}>
+          {/* 花茎 */}
+          <mesh castShadow>
+            <cylinderGeometry args={[0.01, 0.01, 0.15, 4]} />
+            <meshStandardMaterial color="#2d5a2d" />
+          </mesh>
+          {/* 花朵点缀（小球体） */}
+          <mesh position={[0, 0.1, 0]}>
+            <sphereGeometry args={[0.04, 6, 6]} />
+            <meshBasicMaterial color="#fca5a5" /> {/* 浅粉小花 */}
+          </mesh>
+        </group>
+
+        <group position={[-0.5, 0.04, 1.8]}>
+          <mesh castShadow>
+            <cylinderGeometry args={[0.01, 0.01, 0.12, 4]} />
+            <meshStandardMaterial color="#2d5a2d" />
+          </mesh>
+          <mesh position={[0, 0.08, 0]}>
+            <sphereGeometry args={[0.03, 6, 6]} />
+            <meshBasicMaterial color="#fef08a" /> {/* 嫩黄小花 */}
+          </mesh>
+        </group>
+
+        <group position={[0.6, 0.04, 2.3]}>
+          <mesh castShadow>
+            <cylinderGeometry args={[0.01, 0.01, 0.14, 4]} />
+            <meshStandardMaterial color="#2d5a2d" />
+          </mesh>
+          <mesh position={[0, 0.09, 0]}>
+            <sphereGeometry args={[0.035, 6, 6]} />
+            <meshBasicMaterial color="#fed7aa" /> {/* 暖橙小花 */}
+          </mesh>
+        </group>
+
+        {/* 散落在各处的灰色、黑褐色的鹅卵石 */}
+        <mesh position={[1.4, 0.05, -0.8]} castShadow>
+          <dodecahedronGeometry args={[0.12, 0]} />
+          <meshStandardMaterial color="#555555" roughness={0.92} />
         </mesh>
-        <mesh position={[-0.5, 0.04, 1.8]} castShadow>
-          <coneGeometry args={[0.08, 0.12, 4]} />
-          <meshStandardMaterial color="#355e35" roughness={1} />
+        <mesh position={[-1.6, 0.03, 0.5]} castShadow>
+          <dodecahedronGeometry args={[0.08, 0]} />
+          <meshStandardMaterial color="#444444" roughness={0.95} />
+        </mesh>
+        <mesh position={[0.3, 0.04, 2.5]} castShadow>
+          <dodecahedronGeometry args={[0.1, 0]} />
+          <meshStandardMaterial color="#665c54" roughness={0.9} />
         </mesh>
 
-        {/* 散落在各处的灰色鹅卵石 */}
-        <mesh position={[1.2, 0.05, -0.8]} castShadow>
-          <dodecahedronGeometry args={[0.12, 0]} />
-          <meshStandardMaterial color="#555555" roughness={0.9} />
-        </mesh>
-        <mesh position={[-1.5, 0.03, 0.5]} castShadow>
-          <dodecahedronGeometry args={[0.08, 0]} />
-          <meshStandardMaterial color="#666666" roughness={0.9} />
-        </mesh>
-        <mesh position={[0.5, 0.04, 2.3]} castShadow>
-          <dodecahedronGeometry args={[0.1, 0]} />
-          <meshStandardMaterial color="#444444" roughness={0.9} />
-        </mesh>
+        {/* 局部的低空温情萤火虫：在草丛和小花丛中极其微弱缓慢地飘动 */}
+        <Sparkles count={35} scale={[6, 1.5, 6]} size={1.8} speed={0.2} opacity={0.6} color="#bef264" position={[0, 0.4, 0.5]} noise={2} />
       </group>
     </group>
   );
@@ -250,13 +291,15 @@ function Scene() {
         {/* 银河高亮区 */}
         <Stars radius={70} depth={20} count={2500} factor={8} saturation={0.8} fade speed={0.5} />
         
-        {/* 绚丽星云光晕（Nebula Glow）：使用发光的点光源和彩色粒子，渲染粉紫/青蓝相间的虚幻梦境银河 */}
-        {/* 粉紫色星云粒子群 */}
-        <Sparkles count={80} scale={40} size={4} speed={0.1} opacity={0.6} color="#d8b4fe" position={[5, 10, -10]} />
-        {/* 深邃青蓝色星云粒子群 */}
-        <Sparkles count={80} scale={40} size={5} speed={0.08} opacity={0.5} color="#818cf8" position={[-5, 8, -8]} />
-        {/* 金色银河核心颗粒 */}
-        <Sparkles count={50} scale={25} size={3} speed={0.15} opacity={0.7} color="#fde047" position={[0, 12, -5]} />
+        {/* 绚丽星云光晕（Nebula Glow）：使用夕阳余晖与晚霞相间的暗暖色调，营造绚烂神秘的虚幻宇宙 */}
+        {/* 夕阳晚霞粉金星云粒子群 */}
+        <Sparkles count={120} scale={40} size={5} speed={0.12} opacity={0.65} color="#fdba74" position={[10, 12, -15]} />
+        {/* 紫罗兰暮色星云粒子群 */}
+        <Sparkles count={100} scale={40} size={6} speed={0.09} opacity={0.55} color="#c084fc" position={[-8, 6, -10]} />
+        {/* 绯红火烧云深空粒子群 */}
+        <Sparkles count={80} scale={35} size={4.5} speed={0.06} opacity={0.5} color="#f43f5e" position={[2, 10, -5]} />
+        {/* 靛蓝色幽深太空格底 */}
+        <Sparkles count={100} scale={50} size={3} speed={0.05} opacity={0.4} color="#6366f1" position={[0, -5, -20]} />
       </group>
       
       {/* 极夜环境光照 - 稍微提亮并加入暖色调 */}
