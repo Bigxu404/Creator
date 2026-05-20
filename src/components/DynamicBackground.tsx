@@ -50,7 +50,7 @@ function CampfireModel() {
   return (
     <primitive 
       object={scene} 
-      position={[0, -0.9, 1.5]} // 稍微下移篝火使其完美贴合
+      position={[0, -1.02, 1.5]} // 降低位置使其严丝合缝贴合球体地表（消除空白悬空，紧密压实地表）
       scale={2} // 放大篝火模型
     />
   );
@@ -148,7 +148,7 @@ function CampfireLight() {
   });
 
   return (
-    <group position={[0, -0.7, 1.5]}>
+    <group position={[0, -0.82, 1.5]}>
       {/* 动态光源 - 照亮地面和角色周围环境 */}
       <pointLight 
         ref={lightRef} 
@@ -193,7 +193,7 @@ function CampfireLight() {
 // 更真实的篝火火星粒子系统
 function CampfireSparkles() {
   return (
-    <group position={[0, -0.7, 1.5]}>
+    <group position={[0, -0.82, 1.5]}>
       {/* 底部剧烈燃烧层：紧贴木柴，数量极大，范围极小，速度快 */}
       <Sparkles count={150} scale={[0.8, 0.4, 0.8]} size={2.5} speed={1.5} opacity={0.9} color="#ff6600" position={[0, 0.2, 0]} noise={10} />
       
