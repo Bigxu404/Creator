@@ -89,7 +89,7 @@ function CampsiteBase() {
 }
 */
 
-// 动态跳跃的篝火光照与波浪起伏的动态火苗
+// 动态跳跃的篝火光照与波浪起伏的真实有机火焰
 function CampfireLight() {
   const lightRef = useRef<THREE.PointLight>(null!);
   const flameGroupRef = useRef<THREE.Group>(null!);
@@ -108,26 +108,30 @@ function CampfireLight() {
       lightRef.current.position.z = Math.cos(t * 8) * 0.15;
     }
     
-    // 1. 让整个火苗群组产生更大幅度、更自然的“S型”有机曲线波动（使用贝塞尔风和二次方噪声模拟）
+    // 让整个火苗群组产生极其柔和、自然的有机曲线波动，模拟真实火焰
     if (flameGroupRef.current) {
-      flameGroupRef.current.rotation.z = Math.sin(t * 3.5) * 0.12 + Math.cos(t * 7) * 0.04; 
-      flameGroupRef.current.rotation.x = Math.cos(t * 2.8) * 0.08 + Math.sin(t * 5.5) * 0.03; 
+      flameGroupRef.current.rotation.z = Math.sin(t * 2.5) * 0.08 + Math.cos(t * 5) * 0.03; 
+      flameGroupRef.current.rotation.x = Math.cos(t * 2.0) * 0.06 + Math.sin(t * 4.5) * 0.02; 
     }
 
-    // 2. 更加不规则的火苗缩放与起伏，带出呼吸和热流腾空感
+    // 动画化火苗：使其矮胖、顶层柔和过度，绝非尖锐生硬的直棱三角形
     if (flameRef1.current) {
-      flameRef1.current.scale.y = 1.5 + Math.sin(t * 6) * 0.35 + Math.cos(t * 11) * 0.1;
-      flameRef1.current.scale.x = 1.1 + Math.cos(t * 4) * 0.15;
-      flameRef1.current.scale.z = 1.1 + Math.sin(t * 5.2) * 0.15;
+      flameRef1.current.scale.y = 0.8 + Math.sin(t * 5) * 0.15 + Math.cos(t * 9) * 0.05; // 压低火苗高度
+      flameRef1.current.scale.x = 1.3 + Math.cos(t * 4) * 0.1; // 加宽火焰底部，使形态更加圆润和缓
+      flameRef1.current.scale.z = 1.3 + Math.sin(t * 4.5) * 0.1;
     }
     if (flameRef2.current) {
-      flameRef2.current.scale.y = 1.3 + Math.cos(t * 9) * 0.45;
-      flameRef2.current.position.x = Math.sin(t * 5) * 0.08;
-      flameRef2.current.position.z = Math.cos(t * 4.2) * 0.08;
+      flameRef2.current.scale.y = 0.7 + Math.cos(t * 7) * 0.2; // 压低中层高度
+      flameRef2.current.scale.x = 1.2 + Math.sin(t * 5) * 0.08;
+      flameRef2.current.scale.z = 1.2 + Math.cos(t * 4) * 0.08;
+      flameRef2.current.position.x = Math.sin(t * 4) * 0.03;
+      flameRef2.current.position.z = Math.cos(t * 3.5) * 0.03;
     }
     if (flameRef3.current) {
-      flameRef3.current.scale.y = 1.1 + Math.sin(t * 12) * 0.25;
-      flameRef3.current.position.x = -Math.sin(t * 7) * 0.05;
+      flameRef3.current.scale.y = 0.6 + Math.sin(t * 10) * 0.1; // 压低内核高度
+      flameRef3.current.scale.x = 1.1;
+      flameRef3.current.scale.z = 1.1;
+      flameRef3.current.position.x = -Math.sin(t * 6) * 0.02;
     }
   });
 
@@ -145,29 +149,29 @@ function CampfireLight() {
       {/* 篝火基座的额外微弱恒定光源，烘托草地表面的暖色底蕴 */}
       <pointLight
         color="#ff7700"
-        intensity={1.5}
-        distance={6}
-        position={[0, 0.1, 0]}
+        intensity={2.5} // 增强基础发光亮度，确保篝火底座及周边的草地被大范围暖色照亮
+        distance={10}   // 扩大基础暖光的地面照亮范围，形成真实的近亮远暗衰减
+        position={[0, 0.2, 0]}
       />
       
       {/* 动态火苗群组 (Procedural Wave Flames) */}
-      <group ref={flameGroupRef} position={[0, 0.6, 0]}>
-        {/* 外层大火苗（半透明深橙红色，更飘逸） */}
+      <group ref={flameGroupRef} position={[0, 0.4, 0]}>
+        {/* 外层大火苗（半透明深橙红色，矮胖柔和形态，增加分段数使其圆滑） */}
         <mesh ref={flameRef1} position={[0, 0, 0]}>
-          <coneGeometry args={[0.5, 1.3, 16]} />
-          <meshBasicMaterial color="#ff2200" transparent opacity={0.5} blending={THREE.AdditiveBlending} depthWrite={false} />
+          <coneGeometry args={[0.5, 0.8, 32, 1, true]} /> {/* 使用 openEnded: true 以及更多分段以获得圆润有机形态 */}
+          <meshBasicMaterial color="#ff2200" transparent opacity={0.4} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
         {/* 中层火苗（明亮的暖橙黄色） */}
-        <mesh ref={flameRef2} position={[0, -0.1, 0]}>
-          <coneGeometry args={[0.32, 1.0, 16]} />
-          <meshBasicMaterial color="#ff8800" transparent opacity={0.75} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <mesh ref={flameRef2} position={[0, -0.05, 0]}>
+          <coneGeometry args={[0.35, 0.6, 32, 1, true]} />
+          <meshBasicMaterial color="#ff8800" transparent opacity={0.65} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
         {/* 内核火苗（极度亮黄高温核心，高对比度） */}
-        <mesh ref={flameRef3} position={[0, -0.2, 0]}>
-          <coneGeometry args={[0.16, 0.7, 16]} />
-          <meshBasicMaterial color="#ffea00" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <mesh ref={flameRef3} position={[0, -0.1, 0]}>
+          <coneGeometry args={[0.18, 0.4, 32, 1, true]} />
+          <meshBasicMaterial color="#ffea00" transparent opacity={0.8} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
       </group>
     </group>
