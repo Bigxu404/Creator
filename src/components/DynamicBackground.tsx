@@ -89,9 +89,10 @@ function CampsiteBase() {
 }
 */
 
-// 动态跳跃的篝火光照与动态火苗
+// 动态跳跃的篝火光照与波浪起伏的动态火苗
 function CampfireLight() {
   const lightRef = useRef<THREE.PointLight>(null!);
+  const flameGroupRef = useRef<THREE.Group>(null!);
   const flameRef1 = useRef<THREE.Mesh>(null!);
   const flameRef2 = useRef<THREE.Mesh>(null!);
   const flameRef3 = useRef<THREE.Mesh>(null!);
@@ -100,24 +101,31 @@ function CampfireLight() {
     const t = clock.elapsedTime;
     
     if (lightRef.current) {
-      // 更强烈和温暖的火焰光照跳动效果
+      // 篝火光照跳动
       lightRef.current.intensity = 4 + Math.sin(t * 12) * 1.5 + Math.random() * 0.8;
     }
     
-    // 动画化三个叠加的锥形火苗（火苗更大更猛烈）
+    // 1. 让整个火苗群组产生“S型”曲线波动（模拟风吹和热气流波动）
+    if (flameGroupRef.current) {
+      flameGroupRef.current.rotation.z = Math.sin(t * 4) * 0.08; // 左右柔和摇摆
+      flameGroupRef.current.rotation.x = Math.cos(t * 3) * 0.05; // 前后柔和摇摆
+    }
+
+    // 2. 动画化火苗（高度起伏，带有非线性的呼吸感）
     if (flameRef1.current) {
-      flameRef1.current.scale.y = 1.5 + Math.sin(t * 15) * 0.3;
-      flameRef1.current.scale.x = 1.2 + Math.cos(t * 10) * 0.15;
-      flameRef1.current.scale.z = 1.2 + Math.sin(t * 12) * 0.15;
+      flameRef1.current.scale.y = 1.4 + Math.sin(t * 8) * 0.25;
+      flameRef1.current.scale.x = 1.1 + Math.cos(t * 6) * 0.1;
+      flameRef1.current.scale.z = 1.1 + Math.sin(t * 7) * 0.1;
     }
     if (flameRef2.current) {
-      flameRef2.current.scale.y = 1.3 + Math.cos(t * 20) * 0.4;
-      flameRef2.current.position.x = Math.sin(t * 15) * 0.08;
-      flameRef2.current.position.z = Math.cos(t * 12) * 0.08;
+      flameRef2.current.scale.y = 1.2 + Math.cos(t * 10) * 0.3;
+      // 引入正弦曲线偏移，使中层火苗产生扭动感
+      flameRef2.current.position.x = Math.sin(t * 6) * 0.04;
+      flameRef2.current.position.z = Math.cos(t * 5) * 0.04;
     }
     if (flameRef3.current) {
-      flameRef3.current.scale.y = 1.2 + Math.sin(t * 10) * 0.2;
-      flameRef3.current.position.x = -Math.sin(t * 12) * 0.05;
+      flameRef3.current.scale.y = 1.0 + Math.sin(t * 14) * 0.15;
+      flameRef3.current.position.x = -Math.sin(t * 8) * 0.02;
     }
   });
 
@@ -133,24 +141,24 @@ function CampfireLight() {
         shadow-bias={-0.0001}
       />
       
-      {/* 动态火苗 (Procedural Flames) - 位置上移并且放大基座 */}
-      <group position={[0, 0.6, 0]}>
-        {/* 外层大火苗（半透明橙色） */}
+      {/* 动态火苗群组 (Procedural Wave Flames) */}
+      <group ref={flameGroupRef} position={[0, 0.6, 0]}>
+        {/* 外层大火苗（半透明深橙色） */}
         <mesh ref={flameRef1} position={[0, 0, 0]}>
-          <coneGeometry args={[0.45, 1.2, 8]} />
-          <meshBasicMaterial color="#ff5500" transparent opacity={0.6} blending={THREE.AdditiveBlending} depthWrite={false} />
+          <coneGeometry args={[0.45, 1.2, 16]} />
+          <meshBasicMaterial color="#ff3300" transparent opacity={0.5} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
-        {/* 中层火苗（更亮的黄色） */}
-        <mesh ref={flameRef2} position={[0, -0.15, 0]}>
-          <coneGeometry args={[0.3, 0.9, 8]} />
-          <meshBasicMaterial color="#ffaa00" transparent opacity={0.8} blending={THREE.AdditiveBlending} depthWrite={false} />
+        {/* 中层火苗（明亮的暖橙黄色） */}
+        <mesh ref={flameRef2} position={[0, -0.1, 0]}>
+          <coneGeometry args={[0.3, 0.9, 16]} />
+          <meshBasicMaterial color="#ff8800" transparent opacity={0.7} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
-        {/* 内核火苗（接近白色的高温核心） */}
-        <mesh ref={flameRef3} position={[0, -0.3, 0]}>
-          <coneGeometry args={[0.15, 0.6, 8]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} />
+        {/* 内核火苗（极度亮黄高温核心） */}
+        <mesh ref={flameRef3} position={[0, -0.2, 0]}>
+          <coneGeometry args={[0.15, 0.6, 16]} />
+          <meshBasicMaterial color="#ffea00" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
       </group>
     </group>
@@ -175,18 +183,56 @@ function CampfireSparkles() {
 
 // 逼真的草地地面
 function RealisticGround() {
-  // 生成一个高质量的带有些许噪点的草地材质
+  // 增加草坪的起伏感（不平整性），并且撒上一些碎石/杂草的小碎点
   return (
-    <mesh receiveShadow position={[0, -1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      {/* 巨大的平面来充当地面 */}
-      <planeGeometry args={[100, 100, 128, 128]} />
-      <meshStandardMaterial 
-        color="#2c4c2c" // 调亮并增加绿意的草地颜色
-        roughness={0.8} // 稍微降低粗糙度，增加一点光泽
-        metalness={0.05}
-        wireframe={false}
-      />
-    </mesh>
+    <group position={[0, -1, 0]}>
+      {/* 巨大的草地主平面 */}
+      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[100, 100, 128, 128]} />
+        <meshStandardMaterial 
+          color="#1e351b" // 稍微深一点的暗草绿
+          roughness={0.9} 
+          metalness={0.02}
+        />
+      </mesh>
+      
+      {/* 随机散落的一些“草丛”和“小石头”小凸起，避免光秃秃 */}
+      <group position={[0, 0, 0]}>
+        {/* 角色周围的小草堆1 */}
+        <mesh position={[-0.8, 0.05, -0.3]} castShadow>
+          <coneGeometry args={[0.08, 0.15, 4]} />
+          <meshStandardMaterial color="#2d4d2d" roughness={1} />
+        </mesh>
+        <mesh position={[-0.7, 0.08, -0.4]} castShadow>
+          <coneGeometry args={[0.06, 0.2, 4]} />
+          <meshStandardMaterial color="#355e35" roughness={1} />
+        </mesh>
+        
+        {/* 篝火旁边的草堆2 */}
+        <mesh position={[0.7, 0.05, 0.8]} castShadow>
+          <coneGeometry args={[0.1, 0.18, 4]} />
+          <meshStandardMaterial color="#2d4d2d" roughness={1} />
+        </mesh>
+        <mesh position={[-0.5, 0.04, 1.8]} castShadow>
+          <coneGeometry args={[0.08, 0.12, 4]} />
+          <meshStandardMaterial color="#355e35" roughness={1} />
+        </mesh>
+
+        {/* 散落在各处的灰色鹅卵石 */}
+        <mesh position={[1.2, 0.05, -0.8]} castShadow>
+          <dodecahedronGeometry args={[0.12, 0]} />
+          <meshStandardMaterial color="#555555" roughness={0.9} />
+        </mesh>
+        <mesh position={[-1.5, 0.03, 0.5]} castShadow>
+          <dodecahedronGeometry args={[0.08, 0]} />
+          <meshStandardMaterial color="#666666" roughness={0.9} />
+        </mesh>
+        <mesh position={[0.5, 0.04, 2.3]} castShadow>
+          <dodecahedronGeometry args={[0.1, 0]} />
+          <meshStandardMaterial color="#444444" roughness={0.9} />
+        </mesh>
+      </group>
+    </group>
   );
 }
 
@@ -195,14 +241,22 @@ function Scene() {
     <>
       <color attach="background" args={['#050505']} />
       
-      {/* 银河级别的逼真星空背景 */}
+      {/* 银河级别的逼真星空背景，带有绚丽的星云色彩（科幻虚幻风） */}
       <group rotation={[Math.PI / 8, Math.PI / 4, 0]}>
-        {/* 底层小星星（海量） */}
-        <Stars radius={100} depth={50} count={8000} factor={3} saturation={0} fade speed={1} />
-        {/* 中层闪亮星空 */}
-        <Stars radius={80} depth={50} count={2000} factor={6} saturation={0} fade speed={1.5} />
-        {/* 模拟银河星云带（密集的高亮区域） */}
-        <Stars radius={60} depth={20} count={3000} factor={8} saturation={0.5} fade speed={0.5} />
+        {/* 底层暗星星（繁星点点，形成背景纵深） */}
+        <Stars radius={120} depth={50} count={9000} factor={2} saturation={0} fade speed={0.8} />
+        {/* 中层闪烁星星 */}
+        <Stars radius={90} depth={50} count={2000} factor={5} saturation={0.2} fade speed={1.2} />
+        {/* 银河高亮区 */}
+        <Stars radius={70} depth={20} count={2500} factor={8} saturation={0.8} fade speed={0.5} />
+        
+        {/* 绚丽星云光晕（Nebula Glow）：使用发光的点光源和彩色粒子，渲染粉紫/青蓝相间的虚幻梦境银河 */}
+        {/* 粉紫色星云粒子群 */}
+        <Sparkles count={80} scale={40} size={4} speed={0.1} opacity={0.6} color="#d8b4fe" position={[5, 10, -10]} />
+        {/* 深邃青蓝色星云粒子群 */}
+        <Sparkles count={80} scale={40} size={5} speed={0.08} opacity={0.5} color="#818cf8" position={[-5, 8, -8]} />
+        {/* 金色银河核心颗粒 */}
+        <Sparkles count={50} scale={25} size={3} speed={0.15} opacity={0.7} color="#fde047" position={[0, 12, -5]} />
       </group>
       
       {/* 极夜环境光照 - 稍微提亮并加入暖色调 */}
