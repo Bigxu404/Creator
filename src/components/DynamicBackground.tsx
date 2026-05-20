@@ -55,39 +55,73 @@ function CampfireModel() {
   );
 }
 
-// 构建低多边形风格的露营地台
+// 渲染你的 3D 草地底座模型
+function GrassModel() {
+  const { scene } = useGLTF("/models/grass.glb");
+  
+  scene.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+
+  return (
+    <primitive 
+      object={scene} 
+      position={[0, -1.05, 0]} // 稍微垫底一点点，让人和火刚好坐在上面
+      scale={3.5} // 根据实际草坪大小调整
+    />
+  );
+}
+
+// 构建低多边形风格的露营地台（已废弃原生几何体，改用你的 Grass Model）
 function CampsiteBase() {
   return (
-    <group position={[0, -1, 0]}>
-      {/* 悬浮的草地小岛 */}
+    <group position={[0, 0, 0]}>
+      {/* 悬浮的草地小岛（改用你的 3D 模型） */}
       <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
-        <mesh receiveShadow position={[0, -0.2, 0]}>
-          <cylinderGeometry args={[4, 3.5, 0.4, 64]} />
-          <meshStandardMaterial color="#2d4a22" roughness={0.8} />
-        </mesh>
-        {/* 底部的泥土层 */}
-        <mesh receiveShadow position={[0, -0.6, 0]}>
-          <cylinderGeometry args={[3.5, 3, 0.4, 64]} />
-          <meshStandardMaterial color="#3e2723" roughness={1} />
-        </mesh>
+        <GrassModel />
       </Float>
     </group>
   );
 }
 
-// 动态跳跃的篝火光照
+// 动态跳跃的篝火光照与动态火苗
 function CampfireLight() {
   const lightRef = useRef<THREE.PointLight>(null!);
+  const flameRef1 = useRef<THREE.Mesh>(null!);
+  const flameRef2 = useRef<THREE.Mesh>(null!);
+  const flameRef3 = useRef<THREE.Mesh>(null!);
   
   useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    
     if (lightRef.current) {
-      // 更强烈和温暖的火焰跳动效果
-      lightRef.current.intensity = 3 + Math.sin(clock.elapsedTime * 12) * 0.8 + Math.random() * 0.4;
+      // 更强烈和温暖的火焰光照跳动效果
+      lightRef.current.intensity = 3 + Math.sin(t * 12) * 0.8 + Math.random() * 0.4;
+    }
+    
+    // 动画化三个叠加的锥形火苗
+    if (flameRef1.current) {
+      flameRef1.current.scale.y = 1 + Math.sin(t * 15) * 0.2;
+      flameRef1.current.scale.x = 1 + Math.cos(t * 10) * 0.1;
+      flameRef1.current.scale.z = 1 + Math.sin(t * 12) * 0.1;
+    }
+    if (flameRef2.current) {
+      flameRef2.current.scale.y = 1 + Math.cos(t * 20) * 0.3;
+      flameRef2.current.position.x = Math.sin(t * 15) * 0.05;
+      flameRef2.current.position.z = Math.cos(t * 12) * 0.05;
+    }
+    if (flameRef3.current) {
+      flameRef3.current.scale.y = 1 + Math.sin(t * 10) * 0.1;
+      flameRef3.current.position.x = -Math.sin(t * 12) * 0.03;
     }
   });
 
   return (
-    <group position={[0, -0.2, 1.5]}>
+    <group position={[0, -0.6, 1.5]}>
+      {/* 动态光源 */}
       <pointLight 
         ref={lightRef} 
         color="#ff5500" 
@@ -96,6 +130,27 @@ function CampfireLight() {
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0001}
       />
+      
+      {/* 动态火苗 (Procedural Flames) */}
+      <group position={[0, 0.4, 0]}>
+        {/* 外层大火苗（半透明橙色） */}
+        <mesh ref={flameRef1} position={[0, 0, 0]}>
+          <coneGeometry args={[0.3, 0.8, 8]} />
+          <meshBasicMaterial color="#ff5500" transparent opacity={0.6} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+        
+        {/* 中层火苗（更亮的黄色） */}
+        <mesh ref={flameRef2} position={[0, -0.1, 0]}>
+          <coneGeometry args={[0.2, 0.6, 8]} />
+          <meshBasicMaterial color="#ffaa00" transparent opacity={0.8} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+        
+        {/* 内核火苗（接近白色的高温核心） */}
+        <mesh ref={flameRef3} position={[0, -0.2, 0]}>
+          <coneGeometry args={[0.1, 0.4, 8]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+      </group>
     </group>
   );
 }
@@ -182,3 +237,4 @@ export function DynamicBackground() {
 
 useGLTF.preload("/models/character.glb");
 useGLTF.preload("/models/campfire.glb");
+useGLTF.preload("/models/grass.glb");
