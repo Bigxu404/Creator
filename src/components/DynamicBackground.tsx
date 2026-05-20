@@ -101,11 +101,11 @@ function CampfireLight() {
     const t = clock.elapsedTime;
     
     if (lightRef.current) {
-      // 篝火光照大幅增强并更剧烈晃动
-      lightRef.current.intensity = 5 + Math.sin(t * 14) * 2 + Math.random() * 1.2;
-      // 让光源位置轻微晃动，模拟火苗跳动导致影子晃动的物理效果
-      lightRef.current.position.x = Math.sin(t * 10) * 0.15;
-      lightRef.current.position.z = Math.cos(t * 8) * 0.15;
+      // 篝火光照：平滑温和地呼吸，完全删除剧烈抖动/晃眼的极速闪烁效果
+      lightRef.current.intensity = 5.5 + Math.sin(t * 1.5) * 0.5; // 使用超低频(1.5)，柔和地呼吸
+      // 保持光源位置恒定，完全消除阴影和地面光斑的乱晃怪异感
+      lightRef.current.position.x = 0;
+      lightRef.current.position.z = 0;
     }
     
     // 1. 让整个火苗群组产生极其柔和、自然的有机曲线波动，模拟真实火焰
@@ -220,7 +220,7 @@ function RealisticGround() {
         />
       </mesh>
       
-      {/* 随机散落的草丛、鲜花和萤火虫（让地表充满细节） */}
+      {/* 随机散落的草丛和萤火虫（剔除了怪异的小野花） */}
       <group position={[0, 0, 0]}>
         {/* 周围的杂草堆 - 增加了低多边形小碎草，提高自然生态感 */}
         <mesh position={[-0.8, 0.05, -0.3]} castShadow>
@@ -235,42 +235,6 @@ function RealisticGround() {
           <coneGeometry args={[0.07, 0.16, 4]} />
           <meshStandardMaterial color="#2d5a2d" roughness={1} />
         </mesh>
-        
-        {/* 篝火旁边的暖色小鲜花 */}
-        <group position={[0.8, 0.05, 0.8]}>
-          {/* 花茎 */}
-          <mesh castShadow>
-            <cylinderGeometry args={[0.01, 0.01, 0.15, 4]} />
-            <meshStandardMaterial color="#2d5a2d" />
-          </mesh>
-          {/* 花朵点缀（小球体） */}
-          <mesh position={[0, 0.1, 0]}>
-            <sphereGeometry args={[0.04, 6, 6]} />
-            <meshBasicMaterial color="#fca5a5" /> {/* 浅粉小花 */}
-          </mesh>
-        </group>
-
-        <group position={[-0.5, 0.04, 1.8]}>
-          <mesh castShadow>
-            <cylinderGeometry args={[0.01, 0.01, 0.12, 4]} />
-            <meshStandardMaterial color="#2d5a2d" />
-          </mesh>
-          <mesh position={[0, 0.08, 0]}>
-            <sphereGeometry args={[0.03, 6, 6]} />
-            <meshBasicMaterial color="#fef08a" /> {/* 嫩黄小花 */}
-          </mesh>
-        </group>
-
-        <group position={[0.6, 0.04, 2.3]}>
-          <mesh castShadow>
-            <cylinderGeometry args={[0.01, 0.01, 0.14, 4]} />
-            <meshStandardMaterial color="#2d5a2d" />
-          </mesh>
-          <mesh position={[0, 0.09, 0]}>
-            <sphereGeometry args={[0.035, 6, 6]} />
-            <meshBasicMaterial color="#fed7aa" /> {/* 暖橙小花 */}
-          </mesh>
-        </group>
 
         {/* 散落在各处的灰色、黑褐色的鹅卵石 */}
         <mesh position={[1.4, 0.05, -0.8]} castShadow>
@@ -286,7 +250,7 @@ function RealisticGround() {
           <meshStandardMaterial color="#665c54" roughness={0.9} />
         </mesh>
 
-        {/* 局部的低空温情萤火虫：在草丛和小花丛中极其微弱缓慢地飘动 */}
+        {/* 局部的低空温情萤火虫：在草丛和篝火旁极其微弱缓慢地飘动 */}
         <Sparkles count={35} scale={[6, 1.5, 6]} size={1.8} speed={0.2} opacity={0.6} color="#bef264" position={[0, 0.4, 0.5]} noise={2} />
       </group>
     </group>
