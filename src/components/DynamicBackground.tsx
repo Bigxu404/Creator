@@ -165,12 +165,12 @@ export function DynamicBackground() {
         </Suspense>
         
         <OrbitControls 
-          enablePan={false}
+          enablePan={true}
           autoRotate={false}
-          minPolarAngle={Math.PI / 4} 
+          minPolarAngle={Math.PI / 6} 
           maxPolarAngle={Math.PI / 2.1} 
-          minDistance={4} 
-          maxDistance={12} 
+          minDistance={2} 
+          maxDistance={20} 
         />
       </Canvas>
     </div>
