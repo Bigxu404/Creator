@@ -266,36 +266,48 @@ function RealisticGround() {
 function Scene() {
   return (
     <>
-      <color attach="background" args={['#050505']} />
+      {/* 
+        超现实动漫天空背景的核心：
+        使用高对比度霓虹撞色。为了做出完美的青蓝色 (Teal/Cyan) 与 玫红色 (Magenta/Hot Pink) 渐变天空，
+        我们直接将 3D 背景色清空（设为透明），并在 Canvas 之外，使用 CSS 的 linear-gradient 背景，
+        这比 WebGL 纯色更具动漫电影级的高饱和度霓虹质感，且不会消耗 GPU 计算多边形！
+        同时，在 WebGL 内部保留具有泼墨质感与抽象笔触的 3D 星云云雾与漫天霓虹星辰。
+      */}
       
-      {/* 银河级别的逼真星空背景，带有绚丽的星云色彩（科幻虚幻风） */}
-      <group rotation={[Math.PI / 8, Math.PI / 4, 0]}>
-        {/* 底层暗星星（繁星点点，形成背景纵深） */}
-        <Stars radius={120} depth={50} count={9000} factor={2} saturation={0} fade speed={0.8} />
-        {/* 中层闪烁星星 */}
-        <Stars radius={90} depth={50} count={2000} factor={5} saturation={0.2} fade speed={1.2} />
-        {/* 银河高亮区 */}
-        <Stars radius={70} depth={20} count={2500} factor={8} saturation={0.8} fade speed={0.5} />
+      {/* 绚丽超现实动漫星云粒子系统（泼墨质感、高对比度霓虹撞色） */}
+      <group rotation={[Math.PI / 12, Math.PI / 6, 0]}>
+        {/* 底层闪烁霓虹粉色暗星 */}
+        <Stars radius={130} depth={50} count={6000} factor={3} saturation={0.9} fade speed={1.0} />
+        {/* 中层闪烁霓虹青蓝色亮星 */}
+        <Stars radius={90} depth={50} count={3000} factor={6} saturation={1.0} fade speed={1.5} />
         
-        {/* 绚丽星云光晕（Nebula Glow）：使用夕阳余晖与晚霞相间的暗暖色调，营造绚烂神秘的虚幻宇宙 */}
-        {/* 夕阳晚霞粉金星云粒子群 */}
-        <Sparkles count={120} scale={40} size={5} speed={0.12} opacity={0.65} color="#fdba74" position={[10, 12, -15]} />
-        {/* 紫罗兰暮色星云粒子群 */}
-        <Sparkles count={100} scale={40} size={6} speed={0.09} opacity={0.55} color="#c084fc" position={[-8, 6, -10]} />
-        {/* 绯红火烧云深空粒子群 */}
-        <Sparkles count={80} scale={35} size={4.5} speed={0.06} opacity={0.5} color="#f43f5e" position={[2, 10, -5]} />
-        {/* 靛蓝色幽深太空格底 */}
-        <Sparkles count={100} scale={50} size={3} speed={0.05} opacity={0.4} color="#6366f1" position={[0, -5, -20]} />
+        {/* 
+          超现实抽象笔触与泼墨质感：
+          使用精心着色、分层、高饱和度的霓虹 Sparkles 云团，来堆叠出有如新海诚动漫般绚烂而又带有泼墨斑驳纹理的星空。
+        */}
+        {/* 1. 玫红色 (Magenta/Pink) 抽象泼墨星云带 - 集中在左上方 */}
+        <Sparkles count={250} scale={[30, 15, 30]} size={6} speed={0.15} opacity={0.8} color="#ff007f" position={[-10, 15, -12]} />
+        <Sparkles count={150} scale={[20, 8, 20]} size={10} speed={0.08} opacity={0.6} color="#d946ef" position={[-8, 12, -15]} />
+        
+        {/* 2. 青蓝色 (Cyan/Teal) 霓虹撞色星云带 - 集中在右下方与远景 */}
+        <Sparkles count={250} scale={[35, 18, 35]} size={5} speed={0.18} opacity={0.75} color="#00f0ff" position={[12, 6, -18]} />
+        <Sparkles count={150} scale={[25, 10, 25]} size={8} speed={0.1} opacity={0.55} color="#06b6d4" position={[10, 4, -20]} />
+
+        {/* 3. 霓虹撞色核心交汇区 (青蓝与玫红的浪漫融合，产生极具张力的紫色晕染) */}
+        <Sparkles count={120} scale={[15, 15, 15]} size={12} speed={0.25} opacity={0.9} color="#a855f7" position={[1, 10, -10]} />
+        
+        {/* 4. 抽象纯白泼墨星尘粒子，用最慢的微光闪烁，突出电影级梦幻空气感 */}
+        <Sparkles count={80} scale={[40, 40, 40]} size={4} speed={0.05} opacity={0.4} color="#ffffff" position={[0, 5, -25]} />
       </group>
       
-      {/* 极夜环境光照 - 稍微提亮并加入暖色调 */}
-      <ambientLight intensity={0.15} color="#e0e7ff" />
+      {/* 电影级光影调整：极夜环境光微弱提亮，但融入强烈的青蓝色调 */}
+      <ambientLight intensity={0.2} color="#00f0ff" />
       
-      {/* 模拟冷色调的月光作为对比 */}
+      {/* 模拟强烈的霓虹冷月光/背景撞色反光，从左后方打来 */}
       <directionalLight 
-        position={[-10, 20, -10]} 
-        intensity={0.3} 
-        color="#818cf8" 
+        position={[-15, 15, -10]} 
+        intensity={0.6} // 提高亮度以配合高对比度动漫风格
+        color="#ec4899" // 玫红色强力背光，给模型勾勒出极其美丽的霓虹边缘光 (Rim Light)
         castShadow 
         shadow-mapSize={[2048, 2048]} 
         shadow-camera-left={-10}
@@ -329,8 +341,16 @@ function Scene() {
 
 export function DynamicBackground() {
   return (
-    <div className="fixed inset-0 z-0 pointer-events-auto">
+    <div 
+      className="fixed inset-0 z-0 pointer-events-auto"
+      style={{
+        background: "linear-gradient(135deg, #021e25 0%, #060212 40%, #1a010c 100%)"
+      }}
+    >
       {/* 
+        这里在根容器上，注入了动漫电影级的青蓝色（左上）到极暗紫黑色（中），再到玫红色（右下）的超现实霓虹高饱和渐变。
+        Canvas 此时背景为透明，令此 CSS 渐变作为天空底纹透上来。
+        
         将 camera target 稍微往右平移（通过平移 camera position 的 x 轴和 OrbitControls target，
         或者直接通过 group 的 x 轴平移来让画面自然地偏移到屏幕右半部分）。
         这里我们将 camera 的 position 设为 [-2.5, 2, 6]，相比之前的 [-4, 2, 6] 略微右偏，
