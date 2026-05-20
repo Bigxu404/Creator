@@ -101,23 +101,23 @@ function CampfireLight() {
     
     if (lightRef.current) {
       // 更强烈和温暖的火焰光照跳动效果
-      lightRef.current.intensity = 3 + Math.sin(t * 12) * 0.8 + Math.random() * 0.4;
+      lightRef.current.intensity = 4 + Math.sin(t * 12) * 1.5 + Math.random() * 0.8;
     }
     
-    // 动画化三个叠加的锥形火苗
+    // 动画化三个叠加的锥形火苗（火苗更大更猛烈）
     if (flameRef1.current) {
-      flameRef1.current.scale.y = 1 + Math.sin(t * 15) * 0.2;
-      flameRef1.current.scale.x = 1 + Math.cos(t * 10) * 0.1;
-      flameRef1.current.scale.z = 1 + Math.sin(t * 12) * 0.1;
+      flameRef1.current.scale.y = 1.5 + Math.sin(t * 15) * 0.3;
+      flameRef1.current.scale.x = 1.2 + Math.cos(t * 10) * 0.15;
+      flameRef1.current.scale.z = 1.2 + Math.sin(t * 12) * 0.15;
     }
     if (flameRef2.current) {
-      flameRef2.current.scale.y = 1 + Math.cos(t * 20) * 0.3;
-      flameRef2.current.position.x = Math.sin(t * 15) * 0.05;
-      flameRef2.current.position.z = Math.cos(t * 12) * 0.05;
+      flameRef2.current.scale.y = 1.3 + Math.cos(t * 20) * 0.4;
+      flameRef2.current.position.x = Math.sin(t * 15) * 0.08;
+      flameRef2.current.position.z = Math.cos(t * 12) * 0.08;
     }
     if (flameRef3.current) {
-      flameRef3.current.scale.y = 1 + Math.sin(t * 10) * 0.1;
-      flameRef3.current.position.x = -Math.sin(t * 12) * 0.03;
+      flameRef3.current.scale.y = 1.2 + Math.sin(t * 10) * 0.2;
+      flameRef3.current.position.x = -Math.sin(t * 12) * 0.05;
     }
   });
 
@@ -127,29 +127,29 @@ function CampfireLight() {
       <pointLight 
         ref={lightRef} 
         color="#ff5500" 
-        distance={15} 
+        distance={20} 
         castShadow 
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0001}
       />
       
-      {/* 动态火苗 (Procedural Flames) */}
-      <group position={[0, 0.4, 0]}>
+      {/* 动态火苗 (Procedural Flames) - 位置上移并且放大基座 */}
+      <group position={[0, 0.6, 0]}>
         {/* 外层大火苗（半透明橙色） */}
         <mesh ref={flameRef1} position={[0, 0, 0]}>
-          <coneGeometry args={[0.3, 0.8, 8]} />
+          <coneGeometry args={[0.45, 1.2, 8]} />
           <meshBasicMaterial color="#ff5500" transparent opacity={0.6} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
         {/* 中层火苗（更亮的黄色） */}
-        <mesh ref={flameRef2} position={[0, -0.1, 0]}>
-          <coneGeometry args={[0.2, 0.6, 8]} />
+        <mesh ref={flameRef2} position={[0, -0.15, 0]}>
+          <coneGeometry args={[0.3, 0.9, 8]} />
           <meshBasicMaterial color="#ffaa00" transparent opacity={0.8} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
         {/* 内核火苗（接近白色的高温核心） */}
-        <mesh ref={flameRef3} position={[0, -0.2, 0]}>
-          <coneGeometry args={[0.1, 0.4, 8]} />
+        <mesh ref={flameRef3} position={[0, -0.3, 0]}>
+          <coneGeometry args={[0.15, 0.6, 8]} />
           <meshBasicMaterial color="#ffffff" transparent opacity={0.9} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
       </group>
@@ -181,9 +181,9 @@ function RealisticGround() {
       {/* 巨大的平面来充当地面 */}
       <planeGeometry args={[100, 100, 128, 128]} />
       <meshStandardMaterial 
-        color="#1a3b1a" 
-        roughness={0.9} 
-        metalness={0.1}
+        color="#2c4c2c" // 调亮并增加绿意的草地颜色
+        roughness={0.8} // 稍微降低粗糙度，增加一点光泽
+        metalness={0.05}
         wireframe={false}
       />
     </mesh>
@@ -195,8 +195,15 @@ function Scene() {
     <>
       <color attach="background" args={['#050505']} />
       
-      {/* 逼真的星空背景 */}
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+      {/* 银河级别的逼真星空背景 */}
+      <group rotation={[Math.PI / 8, Math.PI / 4, 0]}>
+        {/* 底层小星星（海量） */}
+        <Stars radius={100} depth={50} count={8000} factor={3} saturation={0} fade speed={1} />
+        {/* 中层闪亮星空 */}
+        <Stars radius={80} depth={50} count={2000} factor={6} saturation={0} fade speed={1.5} />
+        {/* 模拟银河星云带（密集的高亮区域） */}
+        <Stars radius={60} depth={20} count={3000} factor={8} saturation={0.5} fade speed={0.5} />
+      </group>
       
       {/* 极夜环境光照 - 稍微提亮并加入暖色调 */}
       <ambientLight intensity={0.15} color="#e0e7ff" />
