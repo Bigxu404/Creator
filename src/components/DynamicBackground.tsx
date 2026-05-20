@@ -31,7 +31,7 @@ function CharacterModel() {
       object={scene} 
       position={[0, -1, 0]} // 调整模型高度，让它正好“坐”在地上
       scale={2} // 根据你的模型大小，这里可以动态调节缩放
-      rotation={[0, 0.4, 0]} // 面向前方，但稍微右倾 20 度，极具呼吸感的构图
+      rotation={[0, 0, 0]} // 面向正前方，直面眼前的篝火（因为篝火被放置在 position={[0, -1.02, 1.5]}，即人物的正前方 Z 轴方向）
     />
   );
 }
@@ -352,11 +352,12 @@ export function DynamicBackground() {
         这里在根容器上，注入了动漫电影级的青蓝色（左上）到极暗紫黑色（中），再到玫红色（右下）的超现实霓虹高饱和渐变。
         Canvas 此时背景为透明，令此 CSS 渐变作为天空底纹透上来。
         
+      {/* 
         为了给左侧菜单留出更纯净、更宽广的“黄金自叙展示区”，我们将整个 3D 模型场景（人物、营火、球形地表）
-        向右平移至 x=2.5。相机的初始焦点 position 与控制器 OrbitControls 的 target 同步右移对齐，
-        使整个 3D 旋转以这个平移后的右侧营火为绝对轴心！
+        向右平移至 x=2.5。同时相机的初始位置朝向左平移，这样在 3D 透视渲染下，原本位于画布中心的 3D 营火场景，
+        会优雅且稳定地折射在屏幕的【右半部分】，从而让屏幕的【左半部分】完美留空，成为文字和交互卡片的视觉黄金舞台！
       */}
-      <Canvas shadows="basic" camera={{ position: [-1.5, 2, 6], fov: 45 }}>
+      <Canvas shadows="basic" camera={{ position: [-0.5, 1.8, 6.2], fov: 45 }}>
         {/* Temporarily remove SoftShadows until the WebGL issue is resolved */}
         
         <Suspense fallback={null}>
