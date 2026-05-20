@@ -108,30 +108,42 @@ function CampfireLight() {
       lightRef.current.position.z = Math.cos(t * 8) * 0.15;
     }
     
-    // 让整个火苗群组产生极其柔和、自然的有机曲线波动，模拟真实火焰
+    // 1. 让整个火苗群组产生极其柔和、自然的有机曲线波动，模拟真实火焰
     if (flameGroupRef.current) {
+      // 引入轻微扭动的 S 型摆动，模拟上升空气阻力
       flameGroupRef.current.rotation.z = Math.sin(t * 2.5) * 0.08 + Math.cos(t * 5) * 0.03; 
       flameGroupRef.current.rotation.x = Math.cos(t * 2.0) * 0.06 + Math.sin(t * 4.5) * 0.02; 
     }
 
-    // 动画化火苗：使其矮胖、顶层柔和过度，绝非尖锐生硬的直棱三角形
+    // 2. 动画化火苗：使其保持尖尖的顶，但在中高部通过正弦进行平滑的立体弯曲/扭动
     if (flameRef1.current) {
-      flameRef1.current.scale.y = 0.8 + Math.sin(t * 5) * 0.15 + Math.cos(t * 9) * 0.05; // 压低火苗高度
-      flameRef1.current.scale.x = 1.3 + Math.cos(t * 4) * 0.1; // 加宽火焰底部，使形态更加圆润和缓
-      flameRef1.current.scale.z = 1.3 + Math.sin(t * 4.5) * 0.1;
+      flameRef1.current.scale.y = 1.2 + Math.sin(t * 5) * 0.15; // 稍稍增高，但保持圆滑
+      flameRef1.current.scale.x = 1.2 + Math.cos(t * 4) * 0.1;
+      flameRef1.current.scale.z = 1.2 + Math.sin(t * 4.5) * 0.1;
+      
+      // 火苗顶部的立体弯曲动画 (弯曲变形)
+      flameRef1.current.rotation.z = Math.sin(t * 6) * 0.1;
+      flameRef1.current.rotation.x = Math.cos(t * 5) * 0.08;
     }
     if (flameRef2.current) {
-      flameRef2.current.scale.y = 0.7 + Math.cos(t * 7) * 0.2; // 压低中层高度
-      flameRef2.current.scale.x = 1.2 + Math.sin(t * 5) * 0.08;
-      flameRef2.current.scale.z = 1.2 + Math.cos(t * 4) * 0.08;
-      flameRef2.current.position.x = Math.sin(t * 4) * 0.03;
-      flameRef2.current.position.z = Math.cos(t * 3.5) * 0.03;
+      flameRef2.current.scale.y = 1.0 + Math.cos(t * 7) * 0.18;
+      flameRef2.current.scale.x = 1.1 + Math.sin(t * 5) * 0.08;
+      flameRef2.current.scale.z = 1.1 + Math.cos(t * 4) * 0.08;
+      
+      // 中层立体扭动
+      flameRef2.current.rotation.z = Math.cos(t * 8) * 0.15;
+      flameRef2.current.rotation.x = Math.sin(t * 7) * 0.1;
+      flameRef2.current.position.x = Math.sin(t * 4) * 0.05;
+      flameRef2.current.position.z = Math.cos(t * 3.5) * 0.05;
     }
     if (flameRef3.current) {
-      flameRef3.current.scale.y = 0.6 + Math.sin(t * 10) * 0.1; // 压低内核高度
-      flameRef3.current.scale.x = 1.1;
-      flameRef3.current.scale.z = 1.1;
-      flameRef3.current.position.x = -Math.sin(t * 6) * 0.02;
+      flameRef3.current.scale.y = 0.8 + Math.sin(t * 10) * 0.1;
+      flameRef3.current.scale.x = 1.0;
+      flameRef3.current.scale.z = 1.0;
+      
+      // 内核微小扭动
+      flameRef3.current.rotation.z = Math.sin(t * 12) * 0.05;
+      flameRef3.current.position.x = -Math.sin(t * 6) * 0.03;
     }
   });
 
@@ -155,22 +167,22 @@ function CampfireLight() {
       />
       
       {/* 动态火苗群组 (Procedural Wave Flames) */}
-      <group ref={flameGroupRef} position={[0, 0.4, 0]}>
-        {/* 外层大火苗（半透明深橙红色，矮胖柔和形态，增加分段数使其圆滑） */}
+      <group ref={flameGroupRef} position={[0, 0.5, 0]}>
+        {/* 外层大火苗（半透明深橙红色，尖顶，通过更多分段保持圆滑） */}
         <mesh ref={flameRef1} position={[0, 0, 0]}>
-          <coneGeometry args={[0.5, 0.8, 32, 1, true]} /> {/* 使用 openEnded: true 以及更多分段以获得圆润有机形态 */}
+          <coneGeometry args={[0.4, 1.0, 32, 16]} /> {/* 重新改回尖锥（圆台底部保持），但增加了高度分段(16)以便进行平滑的立体旋转弯曲 */}
           <meshBasicMaterial color="#ff2200" transparent opacity={0.4} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
         {/* 中层火苗（明亮的暖橙黄色） */}
         <mesh ref={flameRef2} position={[0, -0.05, 0]}>
-          <coneGeometry args={[0.35, 0.6, 32, 1, true]} />
+          <coneGeometry args={[0.28, 0.8, 32, 16]} />
           <meshBasicMaterial color="#ff8800" transparent opacity={0.65} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
         
         {/* 内核火苗（极度亮黄高温核心，高对比度） */}
         <mesh ref={flameRef3} position={[0, -0.1, 0]}>
-          <coneGeometry args={[0.18, 0.4, 32, 1, true]} />
+          <coneGeometry args={[0.14, 0.5, 32, 8]} />
           <meshBasicMaterial color="#ffea00" transparent opacity={0.8} blending={THREE.AdditiveBlending} depthWrite={false} />
         </mesh>
       </group>
