@@ -55,7 +55,8 @@ function CampfireModel() {
   );
 }
 
-// 渲染你的 3D 草地底座模型
+// 渲染你的 3D 草地底座模型 (已废弃，暂时注释掉)
+/*
 function GrassModel() {
   const { scene } = useGLTF("/models/grass.glb");
   
@@ -79,13 +80,13 @@ function GrassModel() {
 function CampsiteBase() {
   return (
     <group position={[0, 0, 0]}>
-      {/* 悬浮的草地小岛（改用你的 3D 模型） */}
       <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
         <GrassModel />
       </Float>
     </group>
   );
 }
+*/
 
 // 动态跳跃的篝火光照与动态火苗
 function CampfireLight() {
@@ -189,7 +190,6 @@ function Scene() {
       />
 
       <group position={[0, 0, 0]}>
-        <CampsiteBase />
         <CampfireLight />
         
         {/* 注入你的真实模型 */}
