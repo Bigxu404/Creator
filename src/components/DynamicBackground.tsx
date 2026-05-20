@@ -211,14 +211,14 @@ function RealisticGround() {
   return (
     <group position={[0, -1, 0]}>
       {/* 绿色的微型小星球草地 */}
-      <mesh receiveShadow position={[0, -2.5, 0]}>
+      <mesh receiveShadow position={[0, -6, 0]}>
         {/* 
-          使用球体 Geometry (Sphere) 充当微型小行星。
-          球体半径设为 2.5，高度细分拉满 (64, 64) 确保完美的弧线。
-          位置 y=-2.5，这样球体的顶端弧面正好切在 y=0 处，
-          让人（坐高y=-1）和篝火（y=-0.9）完美、自然地立在小星球的最顶端。
+          使用更大的球体 Geometry (Sphere) 充当微型小行星，使其直径大约是整个屏幕的宽度，弧线更柔和。
+          球体半径设为 6，高度细分拉满 (128, 128) 确保极其完美的弧线。
+          位置 y=-6，这样球体的顶端弧面正好切在 y=0 处，
+          让人（坐高y=-1）和篝火（y=-0.9）完美、自然地立在更大更震撼的小星球的最顶端。
         */}
-        <sphereGeometry args={[2.5, 64, 64]} />
+        <sphereGeometry args={[6, 128, 128]} />
         <meshStandardMaterial 
           color="#152b15" // 带有深邃感和神秘感的暗冷草地色
           roughness={0.92} 
