@@ -59,7 +59,7 @@ export default function BlogPage() {
           >
             <div className="w-full overflow-hidden rounded-lg border border-sky-500/20 bg-white/[0.01] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85),_0_0_60px_rgba(14,165,233,0.12)] group-hover:border-sky-500/60 group-hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.95),_0_0_95px_rgba(14,165,233,0.48),_0_0_35px_rgba(14,165,233,0.25)] transition-all duration-700 relative">
               <img 
-                src="/我的博客.png" 
+                src="/我的博客.webp" 
                 alt="我的博客 封面" 
                 className="w-full h-auto object-contain opacity-100 transition-opacity duration-700"
               />
@@ -86,7 +86,7 @@ export default function BlogPage() {
           >
             <div className="w-full overflow-hidden rounded-lg border border-white/[0.04] bg-white/[0.01] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] group-hover:border-white/10 group-hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.95)] transition-all duration-700 relative">
               <img 
-                src="/blog2.png" 
+                src="/blog2.webp" 
                 alt="博客展示 2" 
                 className="w-full h-auto object-contain opacity-95 group-hover:opacity-100 transition-all duration-700"
               />

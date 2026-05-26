@@ -83,7 +83,7 @@ export default function WorksPage() {
                 >
                   <div className="w-full overflow-hidden rounded-xl border border-amber-500/15 bg-black/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8),_0_0_50px_rgba(245,158,11,0.06)] group-hover:border-amber-500/35 group-hover:shadow-[0_30px_70px_-10px_rgba(0,0,0,0.95),_0_0_65px_rgba(245,158,11,0.18)] transition-all duration-700 relative">
                     <img 
-                      src="/neofeed封面.png" 
+                      src="/neofeed封面.webp" 
                       alt="NeoFeed 封面" 
                       className="w-full h-auto object-contain opacity-95 group-hover:opacity-100 transition-all duration-700"
                     />

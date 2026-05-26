@@ -97,7 +97,7 @@ export default function AboutPage() {
               {/* 人像原片 2 (直接采用原生 img 并设为 h-auto，彻底摒弃任何可能有裁切的外层 aspect/overflow 类，百分之百原画无损全显) */}
               <div className="relative group/img2 w-[180px] md:w-[260px]">
                 <img 
-                  src="/alice-gen-1779295412219.png" 
+                  src="/alice-gen-1779295412219.webp" 
                   alt="阿旭 02"
                   className="w-full h-auto rounded-md border border-white/10 bg-white/[0.02] opacity-90 group-hover/img2:opacity-100 transition-opacity duration-500 ease-out shadow-lg"
                 />

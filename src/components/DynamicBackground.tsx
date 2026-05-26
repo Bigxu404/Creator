@@ -58,39 +58,6 @@ function CampfireModel() {
   );
 }
 
-// 渲染你的 3D 草地底座模型 (已废弃，暂时注释掉)
-/*
-function GrassModel() {
-  const { scene } = useGLTF("/models/grass.glb");
-  
-  scene.traverse((child) => {
-    if (child instanceof THREE.Mesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-    }
-  });
-
-  return (
-    <primitive 
-      object={scene} 
-      position={[0, -1.2, 0]} // 将草地继续下移，使其顶层与人物底部（y=-1）贴合
-      scale={[8, 3.5, 8]} // 保持高度 (Y: 3.5) 不变，大幅拉长左右和前后 (X, Z: 8) 的长度
-    />
-  );
-}
-
-// 构建低多边形风格的露营地台（已废弃原生几何体，改用你的 Grass Model）
-function CampsiteBase() {
-  return (
-    <group position={[0, 0, 0]}>
-      <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
-        <GrassModel />
-      </Float>
-    </group>
-  );
-}
-*/
-
 // 动态跳跃的篝火光照与波浪起伏的真实有机火焰
 function CampfireLight() {
   const lightRef = useRef<THREE.PointLight>(null!);
@@ -454,4 +421,3 @@ export function DynamicBackground() {
 
 useGLTF.preload("/models/character.glb");
 useGLTF.preload("/models/campfire.glb");
-useGLTF.preload("/models/grass.glb");

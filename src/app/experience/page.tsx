@@ -241,7 +241,7 @@ function ProjectOne({
               {/* 设定固定 4:5 的高框，配合 object-top 和 object-cover，放大比例展现长图的最头部部分 */}
               <div className="w-full aspect-[4/5] overflow-hidden rounded-md border border-white/10 bg-white/[0.01] shadow-xl group-hover/traelink:border-amber-500/50 transition-colors duration-500 relative">
                 <img 
-                  src="/trae-solo-ide.png" 
+                  src="/trae-solo-ide.webp"
                   alt="TRAE SOLO AI IDE 在办公领域的全面升级" 
                   className="w-full h-full object-cover object-top scale-[1.08] opacity-85 group-hover/traelink:opacity-100 group-hover/traelink:scale-[1.12] transition-all duration-700 ease-out"
                 />
@@ -272,10 +272,10 @@ function ProjectOne({
               {/* 上半张图：image1 */}
               <div 
                 className="w-full aspect-[2220/1338] overflow-hidden rounded-t-[4px] cursor-zoom-in group/img1 relative"
-                onClick={() => onPreviewImage("/systemprompt-debug-1.png", "SYSTEMPROMPT TRACING DEBUG CONSOLE")}
+                onClick={() => onPreviewImage("/systemprompt-debug-1.webp", "SYSTEMPROMPT TRACING DEBUG CONSOLE")}
               >
                 <img 
-                  src="/systemprompt-debug-1.png" 
+                  src="/systemprompt-debug-1.webp" 
                   alt="systemprompt调试1" 
                   className="w-full h-full object-cover object-center opacity-85 group-hover/img1:opacity-100 transition-all duration-500 ease-out scale-[1.01] group-hover/img1:scale-[1.04]"
                 />
@@ -288,10 +288,10 @@ function ProjectOne({
               {/* 下半张图：image */}
               <div 
                 className="w-full aspect-[2286/1324] overflow-hidden rounded-b-[4px] cursor-zoom-in group/img2 relative"
-                onClick={() => onPreviewImage("/systemprompt-debug-2.png", "TOOLS TRACING DEBUG CONSOLE")}
+                onClick={() => onPreviewImage("/systemprompt-debug-2.webp", "TOOLS TRACING DEBUG CONSOLE")}
               >
                 <img 
-                  src="/systemprompt-debug-2.png" 
+                  src="/systemprompt-debug-2.webp" 
                   alt="systemprompt调试2" 
                   className="w-full h-full object-cover object-center opacity-85 group-hover/img2:opacity-100 transition-all duration-500 ease-out scale-[1.01] group-hover/img2:scale-[1.04]"
                 />
@@ -317,10 +317,10 @@ function ProjectOne({
             {/* 卡片框，配合呼吸动效、缩放与圆角 */}
             <div 
               className="w-full rounded-md border border-white/10 bg-white/[0.01] overflow-hidden shadow-xl cursor-zoom-in group/img3 relative aspect-[2620/1354] hover:border-amber-500/30 transition-colors duration-500"
-              onClick={() => onPreviewImage("/benchmark-test.png", "BENCHMARK PERFORMANCE METRICS")}
+              onClick={() => onPreviewImage("/benchmark-test.webp", "BENCHMARK PERFORMANCE METRICS")}
             >
               <img 
-                src="/benchmark-test.png" 
+                src="/benchmark-test.webp" 
                 alt="Benchmark 评测指标" 
                 className="w-full h-full object-cover object-center opacity-85 group-hover/img3:opacity-100 transition-all duration-500 ease-out scale-[1.01] group-hover/img3:scale-[1.04]"
               />
@@ -366,7 +366,7 @@ function ProjectTwo({
             >
               <div className="w-full aspect-[4/5] overflow-hidden rounded-md border border-white/10 bg-white/[0.01] shadow-xl group-hover/hooklink:border-amber-500/50 transition-colors duration-500 relative">
                 <img 
-                  src="/ai-hook-strategy.png" 
+                  src="/ai-hook-strategy.webp" 
                   alt="如何优化AI的反问勾子" 
                   className="w-full h-full object-cover object-top scale-[1.08] opacity-85 group-hover/hooklink:opacity-100 group-hover/hooklink:scale-[1.12] transition-all duration-700 ease-out"
                 />
@@ -529,7 +529,7 @@ export default function ExperiencePage() {
               {/* 工作核心配图：水平居中，置于文字下方，使用 3584/1120 比例完全展现横幅全景 */}
               <div className="w-full max-w-[560px] aspect-[3584/1120] overflow-hidden rounded-md flex items-center justify-center border border-white/5 bg-white/[0.01] shadow-lg">
                 <img 
-                  src="/alice-gen-1779610342651.png" 
+                  src="/alice-gen-1779610342651.webp" 
                   alt="让AI在WPS上自然发生" 
                   className="w-full h-full object-cover object-center opacity-90 hover:opacity-100 transition-opacity duration-700"
                 />
@@ -669,7 +669,7 @@ export default function ExperiencePage() {
                       >
                         <div className="w-full aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-white/[0.01] shadow-xl group-hover/imglink:border-amber-500/50 transition-colors duration-500 relative">
                           <img 
-                            src="/AI聊文档-解构与思考.png" 
+                            src="/AI聊文档-解构与思考.webp" 
                             alt="聊文档产品的初期思考" 
                             className="w-full h-full object-cover object-center opacity-85 group-hover/imglink:opacity-100 transition-opacity duration-700"
                           />
@@ -730,7 +730,7 @@ export default function ExperiencePage() {
                       >
                         <div className="w-full aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-white/[0.01] shadow-xl group-hover/weaveblock:border-amber-500/50 transition-colors duration-500 relative">
                           <img 
-                            src="/独立产品分享Weave：解决你的AI信息焦虑.png" 
+                            src="/独立产品分享Weave：解决你的AI信息焦虑.webp" 
                             alt="独立产品Weave的分享" 
                             className="w-full h-full object-cover object-center opacity-85 group-hover/weaveblock:opacity-100 transition-opacity duration-700"
                           />
@@ -756,10 +756,10 @@ export default function ExperiencePage() {
                       {/* 提效思路 交互图 */}
                       <div 
                         className="w-full aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-white/[0.01] shadow-xl cursor-zoom-in group/tipsblock relative"
-                        onClick={() => handleOpenPreview("/提效思路.png", "组织提效的思考")}
+                        onClick={() => handleOpenPreview("/提效思路.webp", "组织提效的思考")}
                       >
                         <img 
-                          src="/提效思路.png" 
+                          src="/提效思路.webp" 
                           alt="组织提效的思考" 
                           className="w-full h-full object-cover object-center opacity-85 group-hover/tipsblock:opacity-100 transition-opacity duration-700"
                         />
