@@ -10,7 +10,8 @@ import {
   ContactShadows,
   Float,
   Sparkles,
-  Stars
+  Stars,
+  useProgress
 } from "@react-three/drei";
 import { Suspense, useRef, useEffect, useState } from "react";
 import * as THREE from "three";
@@ -387,6 +388,17 @@ function Scene() {
 }
 
 export function DynamicBackground() {
+  const { active, progress } = useProgress();
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    if (!active && progress === 100) {
+      // 稍作延迟，平滑淡出，保障高奢视觉连贯性
+      const timer = setTimeout(() => setShowLoader(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [active, progress]);
+
   return (
     <div 
       className="fixed inset-0 z-0 pointer-events-auto"
@@ -415,6 +427,63 @@ export function DynamicBackground() {
           // 移除硬编码的静态 target={[2.5, -0.5, 0]}，让 CameraRig 完全动态接管接力，从而使运镜插值生效！
         />
       </Canvas>
+
+      {/* 
+        高奢定制版 Loading 遮罩层 (Premium Minimalist Loading Overlay)：
+        以极简主义、大文字排版与氛围暖色微光相结合，呈现极致高级的加载与仪式感。
+      */}
+      <AnimatePresence>
+        {showLoader && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#030303] select-none pointer-events-auto"
+          >
+            {/* 氛围暖色缓动微光 */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-amber-500/[0.04] rounded-full blur-[100px] pointer-events-none" />
+
+            <div className="flex flex-col items-center space-y-7 text-center max-w-[360px] px-6 relative z-10">
+              {/* 美学标志 */}
+              <span className="text-[10px] text-white/20 tracking-[0.35em] uppercase font-serif block pl-[0.35em]">
+                3D Atmosphere // 营地宇宙
+              </span>
+              
+              {/* 高奢数字百分比 */}
+              <h1 className="text-4xl md:text-5xl font-extralight font-serif text-white/95 tracking-[0.1em] pl-[0.1em] leading-none">
+                {Math.round(progress)}%
+              </h1>
+
+              {/* 极其克制的进度条轨道 */}
+              <div className="w-[120px] h-[1px] bg-white/5 rounded-full overflow-hidden relative">
+                <motion.div 
+                  className="h-full bg-amber-500/35 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                />
+              </div>
+
+              {/* 温馨提示与直接跳过按钮 */}
+              <div className="flex flex-col items-center space-y-4 pt-1">
+                <p className="text-[9px] text-white/35 tracking-[0.18em] font-light leading-relaxed pl-[0.18em]">
+                  三维慢思考宇宙正在解压载入...<br/>
+                  建议配戴耳机以获得最佳声学沉浸体验
+                </p>
+
+                {/* UX 高阶设计：对网络慢的用户提供一键直接进入选项 */}
+                <button
+                  onClick={() => setShowLoader(false)}
+                  className="text-[9px] text-amber-500/30 hover:text-amber-500/70 tracking-[0.2em] transition-colors duration-300 cursor-pointer focus:outline-none uppercase font-serif pt-1 pl-[0.2em]"
+                  title="无需等待 3D，直接进入网站阅读内容"
+                >
+                  [ Skip to Text Mode // 直接进入 ]
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
