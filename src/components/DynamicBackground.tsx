@@ -18,7 +18,7 @@ import { usePathname } from "next/navigation";
 
 // 渲染你提供的真实 3D 人物模型
 function CharacterModel() {
-  const { scene } = useGLTF("/models/character.glb");
+  const { scene } = useGLTF("/models/character.glb", "/draco/");
   
   // 遍历模型并开启投影和接收阴影
   scene.traverse((child) => {
@@ -40,7 +40,7 @@ function CharacterModel() {
 
 // 渲染新的 3D 篝火模型
 function CampfireModel() {
-  const { scene } = useGLTF("/models/campfire.glb");
+  const { scene } = useGLTF("/models/campfire.glb", "/draco/");
   
   scene.traverse((child) => {
     if (child instanceof THREE.Mesh) {
@@ -419,5 +419,5 @@ export function DynamicBackground() {
   );
 }
 
-useGLTF.preload("/models/character.glb");
-useGLTF.preload("/models/campfire.glb");
+useGLTF.preload("/models/character.glb", "/draco/");
+useGLTF.preload("/models/campfire.glb", "/draco/");
