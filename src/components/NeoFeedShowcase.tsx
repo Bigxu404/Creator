@@ -46,15 +46,28 @@ export function NeoFeedShowcase() {
           className="glow-effect relative"
         >
           <div className="inline-flex items-center justify-center px-3 py-1 mb-6 text-xs font-medium rounded-full bg-white/10 border border-white/20 text-white/80">
-            Featured Craft
+            Featured Craft // context
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50 mb-6">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50 mb-6 font-serif">
             NeoFeed
           </h1>
-          <p className="text-xl text-white/50 max-w-2xl mx-auto font-light tracking-wide">
+          <p className="text-xl text-white/50 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
             全域上下文中心 (Context Intersection Hub) <br />
             让碎片化的慢思考在这里自动结晶。
           </p>
+
+          <div className="pt-8 flex justify-center">
+            <a 
+              href="https://www.neofeed.cn/landing" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="group relative flex items-center justify-center py-3 px-8 rounded border border-amber-500/25 bg-amber-500/[0.02] text-amber-400 text-xs font-semibold tracking-[0.25em] focus:outline-none transition-all duration-500 shadow-[0_0_15px_rgba(245,158,11,0.02)] hover:shadow-[0_0_20px_rgba(245,158,11,0.08)] hover:border-amber-500/50 hover:bg-amber-500/[0.04]"
+            >
+              {/* 慢速呼吸流光微特效 */}
+              <span className="absolute inset-0 w-full h-full rounded bg-gradient-to-r from-amber-500/0 via-amber-500/5 to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              <span>探索 NeoFeed 官网 ↗</span>
+            </a>
+          </div>
         </motion.div>
       </motion.section>
 

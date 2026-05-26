@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { DynamicBackground } from "@/components/DynamicBackground";
+import { NavigationBar } from "@/components/NavigationBar";
 
 export const metadata: Metadata = {
   title: "Campsite Diorama | 3D Space",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <div className="relative z-10 pointer-events-none">
           {children}
         </div>
+        <NavigationBar />
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, AnimatePresence } from "framer-motion";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { 
   OrbitControls, 
@@ -11,8 +12,9 @@ import {
   Sparkles,
   Stars
 } from "@react-three/drei";
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useEffect, useState } from "react";
 import * as THREE from "three";
+import { usePathname } from "next/navigation";
 
 // 渲染你提供的真实 3D 人物模型
 function CharacterModel() {
@@ -216,99 +218,177 @@ function RealisticGround() {
           将球体直径进一步放大至 12.0（半径12.0），使其更加平缓宏大，从而令篝火和人几乎可以说是“贴在球体表面上”。
           球体半径设为 12，高度细分保持在 128 确保极致完美的弧线。
           位置 y=-12，这样球体的顶端弧面正好极为精细地切在 y=0 处，
-          让人（坐高y=-1）和篝火（y=-0.9）能够完美、极其稳定、平滑地贴在巨大行星的地表最顶端。
+          让人（坐高y=-1） and 篝火（y=-1.02）能够完美、极其稳定、平滑地贴在巨大行星的地表最顶端。
+          
+          根据反馈，草地过于奇怪，这里将草地材质全部重构为极具科幻感、带有哑光高级质感的【灰色微型天体碎石表面】。
+          灰色表面能够更高级地反衬营火暖光的红色与夜空的青蓝色，呈现极致干净冷冽的格调！
         */}
         <sphereGeometry args={[12, 128, 128]} />
         <meshStandardMaterial 
-          color="#152b15" // 带有深邃感和神秘感的暗冷草地色
-          roughness={0.92} 
-          metalness={0.01}
+          color="#1e1e1e" // 稍微更暗沉、有分量的太空深灰色
+          roughness={0.82} // 大幅提高粗糙度 (0.4 -> 0.82)，使其极其粗糙、不光滑，完美展现干燥砂砾的颗粒漫反射
+          metalness={0.05} // 降低金属度 (0.2 -> 0.05)，使其回归非金属的干燥星体石质表面
         />
       </mesh>
       
-      {/* 随机散落的草丛和萤火虫（让地表充满细节） */}
+      {/* 随机散落的碎石和萤火虫（让地表充满细节） */}
       <group position={[0, 0, 0]}>
-        {/* 周围的杂草堆 - 增加了低多边形小碎草，提高自然生态感 */}
+        {/* 周围的杂草堆 - 已经全部剔除，替换为低多边形小碎石以完美契合灰色太空星球 */}
         <mesh position={[-0.8, 0.05, -0.3]} castShadow>
-          <coneGeometry args={[0.08, 0.18, 4]} />
-          <meshStandardMaterial color="#2d5a2d" roughness={1} />
+          <dodecahedronGeometry args={[0.06, 0]} />
+          <meshStandardMaterial color="#555555" roughness={0.8} />
         </mesh>
         <mesh position={[-0.7, 0.08, -0.4]} castShadow>
-          <coneGeometry args={[0.06, 0.24, 4]} />
-          <meshStandardMaterial color="#3d6e3d" roughness={1} />
+          <dodecahedronGeometry args={[0.05, 0]} />
+          <meshStandardMaterial color="#666666" roughness={0.8} />
         </mesh>
         <mesh position={[-1.2, 0.06, 0.2]} castShadow>
-          <coneGeometry args={[0.07, 0.16, 4]} />
-          <meshStandardMaterial color="#2d5a2d" roughness={1} />
+          <dodecahedronGeometry args={[0.06, 0]} />
+          <meshStandardMaterial color="#555555" roughness={0.8} />
         </mesh>
 
         {/* 散落在各处的灰色、黑褐色的鹅卵石 */}
         <mesh position={[1.4, 0.05, -0.8]} castShadow>
           <dodecahedronGeometry args={[0.12, 0]} />
-          <meshStandardMaterial color="#555555" roughness={0.92} />
+          <meshStandardMaterial color="#777777" roughness={0.7} />
         </mesh>
         <mesh position={[-1.6, 0.03, 0.5]} castShadow>
           <dodecahedronGeometry args={[0.08, 0]} />
-          <meshStandardMaterial color="#444444" roughness={0.95} />
+          <meshStandardMaterial color="#666666" roughness={0.7} />
         </mesh>
         <mesh position={[0.3, 0.04, 2.5]} castShadow>
           <dodecahedronGeometry args={[0.1, 0]} />
-          <meshStandardMaterial color="#665c54" roughness={0.9} />
+          <meshStandardMaterial color="#888888" roughness={0.7} />
         </mesh>
 
-        {/* 局部的低空温情萤火虫：在草丛和篝火旁极其微弱缓慢地飘动 */}
+        {/* 局部的低空温情萤火虫：在草丛 and 篝火旁极其微弱缓慢地飘动 */}
         <Sparkles count={35} scale={[6, 1.5, 6]} size={1.8} speed={0.2} opacity={0.6} color="#bef264" position={[0, 0.4, 0.5]} noise={2} />
       </group>
     </group>
   );
 }
 
+// 摄像机镜头三维运动管理系统 (Camera Rig Component)
+function CameraRig() {
+  const pathname = usePathname();
+  
+  // 定义不同路由下的 3D 摄像机【目标位置(Position)】与【对焦标靶(Target)】
+  // 注意：因为场景整体向右平移了 2.5 米 (group position={[2.5, 0, 0]})，
+  // 我们的对焦目标和摄像机 X 轴应该同步融入 2.5 的偏移，以维持精确的三维透视！
+  const rigConfig: Record<string, { pos: [number, number, number]; target: [number, number, number] }> = {
+    "/": {
+      // 首页：广阔远景，从斜上方俯瞰
+      pos: [2.5 - 3.0, 1.8, 6.2], 
+      target: [2.5, -0.5, 0]
+    },
+    "/about": {
+      // 关于我：近距离观测，镜头降到人物斜右前方，对焦人物侧脸
+      pos: [2.5 + 1.2, 0.4, 2.8],
+      target: [2.5, -0.2, 0.1]
+    },
+    "/experience": {
+      // 工作经历：中景观测，镜头移至人物左前方，平视对焦营火及人物轮廓
+      pos: [2.5 - 1.2, 0.8, 3.2],
+      target: [2.5, -0.1, 1.2]
+    },
+    "/works": {
+      // 作品集：飞升至正上方进行俯瞰（建筑规划视角）
+      pos: [2.5, 5.2, 2.5],
+      target: [2.5, -0.8, 1.0]
+    },
+    "/blog": {
+      // 随笔：人影背后低角度逆光，面向深空
+      pos: [2.5 - 0.2, 0.2, -3.2],
+      target: [2.5, 0.4, 3.5]
+    },
+    "/contact": {
+      // 联系我：贴近地表的温暖平视，营火在近前景虚化
+      pos: [2.5 - 1.8, 0.5, 3.2],
+      target: [2.5, -0.2, 1.5]
+    }
+  };
+
+  // 兜底配置（防止路径不匹配）
+  const currentRig = rigConfig[pathname] || rigConfig["/"];
+
+  useFrame((state) => {
+    // 1. 每帧对摄像机的位置进行阻尼插值平滑移动 (Camera Position Lerp)
+    state.camera.position.lerp(
+      new THREE.Vector3(currentRig.pos[0], currentRig.pos[1], currentRig.pos[2]),
+      0.045 // 阻尼系数：数值越小运镜越丝滑柔和、充满胶片级重量感 (4.5% interpolation per frame)
+    );
+
+    // 2. 每帧对 OrbitControls 的 Target 进行阻尼插值平滑对焦 (Orbit Target Lerp)
+    // 这样不仅摄像机在飞，连旋转轴心、对焦中心也会行云流水地平滑漂移！
+    if (state.controls) {
+      const controls = state.controls as any;
+      
+      // 创建临时向量进行 Target 的插值
+      const tempTarget = new THREE.Vector3(currentRig.target[0], currentRig.target[1], currentRig.target[2]);
+      controls.target.lerp(tempTarget, 0.045);
+      
+      // 更新控制器的内部矩阵
+      controls.update();
+    }
+  });
+
+  return null;
+}
+
 function Scene() {
   return (
     <>
       {/* 
-        超现实动漫天空背景的核心：
-        使用高对比度霓虹撞色。为了做出完美的青蓝色 (Teal/Cyan) 与 玫红色 (Magenta/Hot Pink) 渐变天空，
-        我们直接将 3D 背景色清空（设为透明），并在 Canvas 之外，使用 CSS 的 linear-gradient 背景，
-        这比 WebGL 纯色更具动漫电影级的高饱和度霓虹质感，且不会消耗 GPU 计算多边形！
-        同时，在 WebGL 内部保留具有泼墨质感与抽象笔触的 3D 星云云雾与漫天霓虹星辰。
+        将天空背景颜色重构为绝对纯正的深黑色。
+        天空中重新散落晶莹、干净的 3D 星辰，给沉静的夜空注入无限的奥秘与点点微光。
       */}
-      
-      {/* 绚丽超现实动漫星云粒子系统（泼墨质感、高对比度霓虹撞色） */}
-      <group rotation={[Math.PI / 12, Math.PI / 6, 0]}>
-        {/* 底层闪烁霓虹粉色暗星：大幅减少星星数量，使其更有呼吸感、干净透亮 */}
-        <Stars radius={130} depth={50} count={3500} factor={2} saturation={0.8} fade speed={0.8} />
-        {/* 中层闪烁霓虹青蓝色亮星 */}
-        <Stars radius={90} depth={50} count={1200} factor={4} saturation={0.9} fade speed={1.2} />
+      <group rotation={[Math.PI / 10, Math.PI / 5, 0]}>
+        {/* 精致莹润的漫天 3D 星辰：高密度、大小分层，在深黑背景下宛如钻石屑般静静闪烁 */}
+        <Stars radius={140} depth={60} count={6000} factor={3} saturation={0} fade speed={1.2} />
+        <Stars radius={90} depth={40} count={2000} factor={5} saturation={0.1} fade speed={0.8} />
         
-        {/* 
-          超现实抽象笔触与泼墨质感：
-          使用精心着色、分层、高饱和度的霓虹 Sparkles 云团，来堆叠出有如新海诚动漫般绚烂而又带有泼墨斑驳纹理的星空。
-          这里也大幅度精简了 Sparkles 粒子的数量，让漫天云雾不过度喧宾夺主，保持画面的极简和空灵。
-        */}
-        {/* 1. 玫红色 (Magenta/Pink) 抽象泼墨星云带 - 集中在左上方 */}
-        <Sparkles count={80} scale={[30, 15, 30]} size={5} speed={0.12} opacity={0.65} color="#ff007f" position={[-10, 15, -12]} />
-        <Sparkles count={45} scale={[20, 8, 20]} size={8} speed={0.06} opacity={0.5} color="#d946ef" position={[-8, 12, -15]} />
-        
-        {/* 2. 青蓝色 (Cyan/Teal) 霓虹撞色星云带 - 集中在右下方与远景 */}
-        <Sparkles count={80} scale={[35, 18, 35]} size={4} speed={0.15} opacity={0.6} color="#00f0ff" position={[12, 6, -18]} />
-        <Sparkles count={45} scale={[25, 10, 25]} size={6} speed={0.08} opacity={0.45} color="#06b6d4" position={[10, 4, -20]} />
-
-        {/* 3. 霓虹撞色核心交汇区 (青蓝与玫红的浪漫融合，产生极具张力的紫色晕染) */}
-        <Sparkles count={40} scale={[15, 15, 15]} size={10} speed={0.2} opacity={0.7} color="#a855f7" position={[1, 10, -10]} />
-        
-        {/* 4. 抽象纯白泼墨星尘粒子，用最慢的微光闪烁，突出电影级梦幻空气感 */}
-        <Sparkles count={25} scale={[40, 40, 40]} size={3} speed={0.04} opacity={0.3} color="#ffffff" position={[0, 5, -25]} />
+        {/* 极弱、几乎不可见的温润深空云海粒子，给星空增加一丝极具深度的物理折射与朦胧感 */}
+        <Sparkles count={40} scale={[45, 45, 45]} size={2} speed={0.03} opacity={0.35} color="#e0e7ff" position={[0, 5, -20]} />
       </group>
       
-      {/* 电影级光影调整：极夜环境光微弱提亮，但融入强烈的青蓝色调 */}
-      <ambientLight intensity={0.2} color="#00f0ff" />
+      {/* 
+        在天幕深处、极远处，加入几颗精致漂浮的【3D 悬浮小行星 (Distant Planets/Asteroids)】：
+        利用 low-poly 多面体结合极其缓慢的浮动和旋转，营造宏大的天体宇宙纵深感。
+      */}
+      <group>
+        {/* 远处小行星 1号：悬浮在左侧偏上 */}
+        <Float speed={1.2} rotationIntensity={0.6} floatIntensity={0.3} position={[-6, 4, -8]}>
+          <mesh castShadow receiveShadow>
+            <dodecahedronGeometry args={[0.5, 1]} /> {/* 使用更复杂的十二面体裂变球体 */}
+            <meshStandardMaterial color="#2d2d2d" roughness={0.9} metalness={0.1} />
+          </mesh>
+        </Float>
+        
+        {/* 远处小行星 2号：悬浮在中间偏远背景 */}
+        <Float speed={0.8} rotationIntensity={0.4} floatIntensity={0.2} position={[2, 5, -12]}>
+          <mesh castShadow receiveShadow>
+            <dodecahedronGeometry args={[0.3, 0]} />
+            <meshStandardMaterial color="#1a1a1a" roughness={0.95} />
+          </mesh>
+        </Float>
+
+        {/* 远处小行星 3号：小型的悬浮碎星 */}
+        <Float speed={1.5} rotationIntensity={0.8} floatIntensity={0.4} position={[-2, 6, -10]}>
+          <mesh castShadow receiveShadow>
+            <dodecahedronGeometry args={[0.18, 0]} />
+            <meshStandardMaterial color="#242424" roughness={0.92} />
+          </mesh>
+        </Float>
+      </group>
       
-      {/* 模拟强烈的霓虹冷月光/背景撞色反光，从左后方打来 */}
+      {/* 极夜环境光照 - 稍微提亮，融入极其高雅的深空浅紫微光 */}
+      <ambientLight intensity={0.12} color="#f5f3ff" />
+      
+      {/* 模拟从高空打下的银白色冷白月光（完美取代之前的霓虹玫红色强背光，契合高雅沉静的纯黑夜空） */}
       <directionalLight 
-        position={[-15, 15, -10]} 
-        intensity={0.6} // 提高亮度以配合高对比度动漫风格
-        color="#ec4899" // 玫红色强力背光，给模型勾勒出极其美丽的霓虹边缘光 (Rim Light)
+        position={[-12, 18, -8]} 
+        intensity={0.45} 
+        color="#e2e8f0" // 银白色冷调月光，给模型勾勒出高档冷冽的边缘物理高光
         castShadow 
         shadow-mapSize={[2048, 2048]} 
         shadow-camera-left={-10}
@@ -331,8 +411,7 @@ function Scene() {
         <CampfireSparkles />
       </group>
 
-      {/* 真实的接触阴影，让场景更扎实 (平移至右侧 position x=2.5) */}
-      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.6} far={10} color="#000000" position={[2.5, -0.99, 0]} />
+      {/* 真实的接触阴影，已迁移合并在 3D 场景 Group 内部定位，这里废弃避免生成怪异的重叠黑横截面 */}
       
       {/* 环境光反射（HDRI），给予你的模型更好的金属/皮肤光泽反射 */}
       <Environment preset="night" />
@@ -345,20 +424,12 @@ export function DynamicBackground() {
     <div 
       className="fixed inset-0 z-0 pointer-events-auto"
       style={{
-        background: "linear-gradient(135deg, #021e25 0%, #060212 40%, #1a010c 100%)"
+        background: "#030303" // 彻底还原纯粹、干净、空灵的黑色夜空背景
       }}
     >
-      {/* 
-        这里在根容器上，注入了动漫电影级的青蓝色（左上）到极暗紫黑色（中），再到玫红色（右下）的超现实霓虹高饱和渐变。
-        Canvas 此时背景为透明，令此 CSS 渐变作为天空底纹透上来。
-        
-      {/* 
-        为了给左侧菜单留出更纯净、更宽广的“黄金自叙展示区”，我们将整个 3D 模型场景（人物、营火、球形地表）
-        向右平移至 x=2.5。同时相机的初始位置朝向左平移，这样在 3D 透视渲染下，原本位于画布中心的 3D 营火场景，
-        会优雅且稳定地折射在屏幕的【右半部分】，从而让屏幕的【左半部分】完美留空，成为文字和交互卡片的视觉黄金舞台！
-      */}
       <Canvas shadows="basic" camera={{ position: [-0.5, 1.8, 6.2], fov: 45 }}>
-        {/* Temporarily remove SoftShadows until the WebGL issue is resolved */}
+        {/* 注入三维运镜轨道管理系统，让 Tab 的切换完美自动联动镜头转换！ */}
+        <CameraRig />
         
         <Suspense fallback={null}>
           <Scene />
@@ -374,7 +445,7 @@ export function DynamicBackground() {
           maxPolarAngle={Math.PI / 2.1} 
           minDistance={2} 
           maxDistance={20} 
-          target={[2.5, -0.5, 0]} // 让 OrbitControls 的旋转中心也对齐进一步右偏的营火场景中心(2.5, -0.5, 0)
+          // 移除硬编码的静态 target={[2.5, -0.5, 0]}，让 CameraRig 完全动态接管接力，从而使运镜插值生效！
         />
       </Canvas>
     </div>

@@ -15,7 +15,109 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), sans-serif;
+  /* 
+    所有字体完美配置：
+    英文优先使用古典、优雅、人文感极强的 serif 古典衬线体 "Times New Roman"、"Georgia"、"serif"；
+    中文紧接着回退并完美对齐 Apple 标准的、温润、极致圆润平滑的无衬线体 "PingFang SC" (简体中文)、"Hiragino Sans GB"；
+    最后优雅兜底。
+  */
+  font-family: "Times New Roman", Times, Georgia, serif, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", sans-serif;
+  overflow: hidden; /* 防止滚轮产生多余的滚动条 */
+}
+
+/* 霓虹星云与极光流转动画（超现实动漫天空纹理） */
+@keyframes nebulaFlow1 {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.25; }
+  50% { transform: translate(8%, -6%) scale(1.15) rotate(120deg); opacity: 0.45; }
+  100% { transform: translate(0, 0) scale(1) rotate(360deg); opacity: 0.25; }
+}
+@keyframes nebulaFlow2 {
+  0% { transform: translate(0, 0) scale(1.1) rotate(0deg); opacity: 0.2; }
+  50% { transform: translate(-10%, 8%) scale(0.95) rotate(-180deg); opacity: 0.38; }
+  100% { transform: translate(0, 0) scale(1.1) rotate(-360deg); opacity: 0.2; }
+}
+@keyframes nebulaFlow3 {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.15; }
+  50% { transform: translate(5%, 10%) scale(1.1) rotate(90deg); opacity: 0.3; }
+  100% { transform: translate(0, 0) scale(1) rotate(360deg); opacity: 0.15; }
+}
+
+.anime-nebula-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 动漫天空中标志性的斑驳与泼墨笔触纹理底噪 */
+.anime-sky-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.anime-nebula-1 {
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 90vw;
+  height: 90vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.45) 0%, rgba(6, 182, 212, 0.1) 50%, rgba(0,0,0,0) 70%);
+  filter: blur(80px);
+  animation: nebulaFlow1 32s infinite ease-in-out;
+}
+
+.anime-nebula-2 {
+  position: absolute;
+  bottom: -30%;
+  right: -20%;
+  width: 100vw;
+  height: 100vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 0, 160, 0.4) 0%, rgba(217, 70, 239, 0.08) 50%, rgba(0,0,0,0) 70%);
+  filter: blur(90px);
+  animation: nebulaFlow2 38s infinite ease-in-out;
+}
+
+.anime-nebula-3 {
+  position: absolute;
+  top: 15%;
+  right: 15%;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(139, 92, 246, 0.05) 50%, rgba(0,0,0,0) 70%);
+  filter: blur(75px);
+  animation: nebulaFlow3 28s infinite ease-in-out;
+}
+
+/* 抽象动漫云朵笔触质感：利用多重非对称的偏心放射渐变，勾勒云卷云舒的动人线条 */
+.anime-cloud-1 {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 650px;
+  height: 250px;
+  background: radial-gradient(ellipse at 40% 60%, rgba(0, 243, 255, 0.18) 0%, rgba(0,0,0,0) 70%);
+  filter: blur(40px) contrast(1.2);
+  transform: rotate(-5deg);
+  border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%;
+}
+
+.anime-cloud-2 {
+  position: absolute;
+  bottom: 20%;
+  right: 10%;
+  width: 750px;
+  height: 320px;
+  background: radial-gradient(ellipse at 60% 40%, rgba(255, 0, 160, 0.15) 0%, rgba(0,0,0,0) 70%);
+  filter: blur(50px) contrast(1.1);
+  transform: rotate(8deg);
+  border-radius: 60% 40% 60% 40% / 40% 50% 40% 60%;
 }
 
 /* Custom glow effects for Apple-like dark mode aesthetics */
@@ -33,4 +135,28 @@ body {
   background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
   pointer-events: none;
   z-index: -1;
+}
+
+/* 呼吸/脉冲动效引导用户点击 */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.03);
+  }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* 隐藏滚动条实用类 */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
