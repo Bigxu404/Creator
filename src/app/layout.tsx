@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { DynamicBackground } from "@/components/DynamicBackground";
 import { NavigationBar } from "@/components/NavigationBar";
+import { GlobalPreloader } from "@/components/GlobalPreloader";
 
 export const metadata: Metadata = {
   title: "Campsite Diorama | 3D Space",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className="bg-black text-white m-0 p-0 overflow-hidden w-screen h-screen">
+        <GlobalPreloader />
         <DynamicBackground />
         <div className="relative z-10 pointer-events-none">
           {children}
