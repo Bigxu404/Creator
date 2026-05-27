@@ -73,31 +73,22 @@ function ActualPreloader() {
           {Math.round(progress)}%
         </h1>
 
-        {/* 极细像素级进度条 */}
-        <div className="w-[140px] h-[1px] bg-white/5 rounded-full overflow-hidden relative">
+        {/* 优雅的高级感进度条 */}
+        <div className="w-[200px] h-[2px] bg-white/10 rounded-full overflow-hidden relative">
           <motion.div 
-            className="h-full bg-amber-500/40 rounded-full"
+            className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)]"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           />
         </div>
 
-        {/* 人文提示与直接跳过按钮 */}
-        <div className="flex flex-col items-center space-y-5">
+        {/* 人文提示 */}
+        <div className="flex flex-col items-center">
           <p className="text-[9px] text-white/30 tracking-[0.18em] font-light leading-relaxed pl-[0.18em]">
             三维慢思考宇宙正在解压载入...<br/>
             建议配戴耳机以获得最佳声学沉浸体验
           </p>
-
-          {/* 优雅的一键跳过直接进入选项 */}
-          <button
-            onClick={() => setShowLoader(false)}
-            className="text-[9px] text-amber-500/35 hover:text-amber-500/80 tracking-[0.2em] transition-colors duration-300 cursor-pointer focus:outline-none uppercase font-serif pt-1 pl-[0.2em]"
-            title="无需等待 3D，直接进入网站阅读内容"
-          >
-            [ Skip to Text Mode // 直接进入 ]
-          </button>
         </div>
       </div>
     </div>

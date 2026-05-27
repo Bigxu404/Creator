@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function AboutPage() {
   return (
@@ -20,7 +21,7 @@ export default function AboutPage() {
           
           {/* 
             两栏排版（独立滚动视窗）：
-            - 左边：纯文字文章，极精细的行高 and 字距，百分之百沉浸阅读。
+            - 左边：画廊级平铺探索视窗，一滚到底，避免双选项卡交互冲突。
             - 间隔：浅浅、清澈的垂直分割线。
             - 右边：单列画轴精品图像，完全无裁剪展示。
           */}
@@ -33,48 +34,172 @@ export default function AboutPage() {
               }
             `}</style>
 
-            {/* 左侧：文章区域 (8/12 宽度，在桌面端右侧加上极为内敛的细分割线) */}
+            {/* 左侧：画廊级平铺探索视窗 (8/12 宽度，在桌面端右侧加上极为内敛的细分割线) */}
             <div 
-              className="md:col-span-8 h-full overflow-y-auto pr-6 md:pr-12 space-y-6 scroll-smooth pb-[15vh] hide-scrollbar md:border-r md:border-white/[0.04]"
+              className="md:col-span-8 h-full overflow-y-auto pr-6 md:pr-12 space-y-12 scroll-smooth pb-[15vh] hide-scrollbar md:border-r md:border-white/[0.04]"
               style={{
                 scrollbarWidth: "none", // Firefox 隐藏滚动条
                 msOverflowStyle: "none" // IE 隐藏滚动条
               }}
             >
-              {/* 纯享文本段落 (使用苹方/PingFang SC，字号优化为 text-[15px]，提供极致的清澈阅读舒适度) */}
+              {/* 纯享文本段落 (使用极简高雅的无彩色系画廊平铺排版，字号优化为 text-[15px]，提供极致的阅读舒适度) */}
               <div 
-                className="space-y-6 text-left"
+                className="space-y-12 text-left"
                 style={{ 
                   fontFamily: '"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif' 
                 }}
               >
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  Hi，你好，我是阿旭。
-                </p>
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  一名 WPS 的 AI Product Manager，已经在 WPS 工作快要 3 年了。除此之外，没有太多的花哨标签。
-                </p>
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  我很热爱产品经理这个工作，且自我判断相对“理想主义” and “old school”。因为做产品，本质是研究人。
-                </p>
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  这可以让我在拥有物理重力的 3D 星球里，用心理学的理论去思考、解构问题，很有成就感 and 岗位的归属感。
-                </p>
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  在 WPS 的三年经历，最开始曾在 B 端，也就是企业事业部做中后台的事情。逻辑严密、具备丰富边界场景、且以安全为核心的“那些需求”，无比苛刻扣细节的 leader，让我学会了：主动、本分且踏实地做事情是职场的基本原则。没有人敢保证不出错，但要做足功课面对挑战。
-                </p>
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  后面来到 C 端，office 事业部做移动端的 AI 产品，更是有趣。我从一名对 AI 仅仅感兴趣，到参与公司黑客松，到 Vibe coding 变成家常便饭，用 AI 做成了一件又一件能带来正收益、正反馈的事情。一个自我成长的飞轮，让我越走越远，想要走的更远。
-                </p>
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  我该如何介绍我自己？一份简历？一份作品集？似乎在当前的这个 AI 时代好像都差点意思。曾经某个腾讯面试官问过我一个问题：“你怎么理解交互？”。
-                </p>
-                <p className="text-[15px] text-white/70 leading-loose tracking-[0.15em] font-light">
-                  说实话这个问题挺无聊的，但是也间接让我思考出一个想法：交互或者互动，可能是人和人，人和机器发生“理解”的必要条件之一。So，这个网站的意义就是如此。
-                </p>
-                <p className="text-[15px] text-white/90 leading-loose tracking-[0.15em] font-normal">
-                  再次欢迎你，陌生人～ 希望能够成为你的朋友。
-                </p>
+                {/* 模块 1：自我介绍 */}
+                <div className="space-y-5">
+                  <h1 className="text-base md:text-lg text-white/95 font-medium tracking-[0.2em] select-none">
+                    自我介绍
+                  </h1>
+                  
+                  <div className="space-y-5">
+                    <p className="text-[14.5px] text-white/90 leading-relaxed tracking-[0.15em] font-light">
+                      Hi，你好，我是阿旭。
+                    </p>
+                    <p className="text-[14.5px] text-white/70 leading-relaxed tracking-[0.15em] font-light">
+                      一名 WPS 的 AI Product Manager，已经在 WPS 工作快要 3 年了。除此之外，没有太多的花哨标签。
+                    </p>
+                    <p className="text-[14.5px] text-white/70 leading-relaxed tracking-[0.15em] font-light">
+                      我很热爱产品经理这个工作，且自我判断相对“理想主义” and “old school”。因为做产品，本质是研究人。
+                    </p>
+                    <p className="text-[14.5px] text-white/70 leading-relaxed tracking-[0.15em] font-light">
+                      本站的意义在于方便各位朋友快速了解我。
+                    </p>
+                  </div>
+                </div>
+
+                {/* 模块 2：过往经历 */}
+                <div className="space-y-5 pt-2">
+                  <h1 className="text-base md:text-lg text-white/95 font-medium tracking-[0.2em] select-none">
+                    过往经历
+                  </h1>
+                  
+                  <div className="space-y-10 pl-[1px]">
+                    {/* 分段 1：教育经历 */}
+                    <div className="space-y-4">
+                      <h2 className="text-[13px] md:text-sm text-white/80 font-medium tracking-[0.15em] block select-none">
+                        教育经历
+                      </h2>
+                      <div className="pl-4 border-l border-white/10 space-y-4">
+                        <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-1 select-none">
+                          <h3 className="text-[14.5px] text-white/95 font-medium tracking-wider">
+                            北京师范大学（硕士） · 应用心理
+                          </h3>
+                          <span className="text-xs font-serif text-white/35">2021 - 2023</span>
+                        </div>
+                        
+                        <div className="space-y-3 text-[13.5px] text-white/65 leading-loose tracking-[0.12em] font-light">
+                          <p>
+                            在读硕士期间，选择“心理与大数据方向”。由于方向特性，很早就了解并接触Transformer架构的模型，跑过Bert模型来做过知识图谱，是AI的较早实践者。
+                          </p>
+                          
+                          <div className="space-y-2 pt-1">
+                            <div className="text-[13px] text-white/90 font-medium select-none">
+                              两份学术结果：
+                            </div>
+                            
+                            <ul className="space-y-2.5 pl-3.5">
+                              <li className="list-disc marker:text-white/20">
+                                心理理论层面：构建了
+                                <Link 
+                                  href="https://www.kdocs.cn/l/cp8eZdZj9NKV?f=301" 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-sky-400 hover:text-sky-300 transition-colors duration-300 cursor-pointer font-medium underline underline-offset-4 decoration-sky-400/20 hover:decoration-sky-300/60 pl-1"
+                                >
+                                  《心理需求模型》
+                                </Link>
+                                ；
+                              </li>
+                              <li className="list-disc marker:text-white/20 leading-relaxed">
+                                学术与前沿应用：参与并挂名了儿童自闭症评估相关的 SCI 论文
+                                <Link 
+                                  href="https://onlinelibrary.wiley.com/doi/abs/10.1002/cav.2059" 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-sky-400 hover:text-sky-300 transition-colors duration-300 cursor-pointer font-medium italic underline underline-offset-4 decoration-sky-400/20 hover:decoration-sky-300/60 break-words pl-1"
+                                >
+                                  “Intelligent recognition of portrait sketch components for child autism assessment”
+                                </Link>
+                                。
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 分段 2：实习经历 */}
+                    <div className="space-y-4">
+                      <h2 className="text-[13px] md:text-sm text-white/80 font-medium tracking-[0.15em] block select-none">
+                        实习经历
+                      </h2>
+                      <div className="pl-4 border-l border-white/10 text-[13.5px] text-white/70 leading-relaxed tracking-[0.12em] font-light space-y-1.5">
+                        <p>
+                          2022.04 - 2022.08 实习于 <strong className="text-white font-medium">西山居</strong>，担任行业研究与情报分析实习生；
+                        </p>
+                        <p>
+                          2022.08 - 2022.11 实习于 <strong className="text-white font-medium">快手（北京）</strong>，担任用户研究与数据分析实习生。
+                        </p>
+                        <div className="pt-2.5 text-[13.5px] text-white/70 leading-relaxed tracking-[0.12em] font-light space-y-1.5">
+                          <p>
+                            秋招时拿了这些offer：美团（sp）、百度、京东、美的以及金山办公，最后选择金山办公，一部分原因是基于对AI将重塑办公生产力的思考。
+                          </p>
+                          <p className="text-white/85 font-normal">
+                            随后在2023.07入职金山办公（WPS）
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 分段 3：当前工作 */}
+                    <div className="space-y-4">
+                      <h2 className="text-[13px] md:text-sm text-white/80 font-medium tracking-[0.15em] block select-none">
+                        当前工作
+                      </h2>
+                      <div className="pl-4 border-l border-white/10 space-y-5">
+                        <div className="space-y-5">
+                          <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-1 select-none">
+                            <h3 className="text-[14.5px] text-white/95 font-medium tracking-wider">
+                              金山办公（WPS）- AI产品经理
+                            </h3>
+                            <span className="text-xs font-serif text-white/35">2023.07 - 至今</span>
+                          </div>
+                          
+                          <div className="space-y-4 text-[13.5px] text-white/65 leading-loose tracking-[0.12em] font-light">
+                            {/* 大厂高绩效核心高光背书 */}
+                            <p className="bg-white/[0.01] border border-white/[0.02] p-4 rounded-sm text-[13px] text-white/80 leading-relaxed">
+                              过去一共参与两次年度绩效评比，<span className="text-white/90 font-medium">均为A（前20%）</span>（PS：入职首年不参与评比）
+                            </p>
+
+                            <div className="space-y-2 text-white/70 font-light leading-relaxed">
+                              <p>
+                                三年中，最先在B端事业部做一些中后台的事情（WPS账号系统、企业通讯录）。
+                              </p>
+                              <p>
+                                随后来到C端-Office事业部，一直从事AI相关的工作，从<span className="text-white/90 font-normal">灵犀AI（Chat bot）</span>到如今的<span className="text-white/90 font-normal">WPS Cowork（Agent）</span>。
+                              </p>
+                            </div>
+
+                            {/* 跳转至完整工作经历页的交互式 CTA 按钮 */}
+                            <div className="pt-4 select-none">
+                              <Link 
+                                href="/experience"
+                                className="group inline-flex items-center gap-1.5 text-xs md:text-[13px] text-sky-400 hover:text-sky-300 transition-colors duration-300 cursor-pointer pointer-events-auto font-medium tracking-wider"
+                              >
+                                <span>了解更多工作经历</span>
+                                <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 {/* 极简人文落款 */}
                 <div className="pt-8 border-t border-white/[0.02] flex items-center justify-between select-none">

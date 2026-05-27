@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Home() {
   // Staggered entry animation variants for a cinematic feel
@@ -46,21 +47,42 @@ export default function Home() {
           variants={itemVariants} 
           className="text-sm text-white/70 font-light leading-loose tracking-widest"
         >
-          Hi，陌生人你好～ 很荣幸你能探访这里
+          Hi，你好
         </motion.p>
         
         <motion.p 
           variants={itemVariants} 
           className="text-sm text-white/70 font-light leading-loose tracking-widest"
         >
-          有很多一张纸无法表述的内容，我都放到了这个网站
+          这里有
+          <Link 
+            href="/experience" 
+            className="text-sky-400 hover:text-sky-300 transition-colors duration-300 cursor-pointer font-medium"
+          >
+            完整的工作经历与表述
+          </Link>
+          ，
+        </motion.p>
+        
+        <motion.p 
+          variants={itemVariants} 
+          className="text-sm text-white/70 font-light leading-loose tracking-widest"
+        >
+          以及一些
+          <Link 
+            href="/works" 
+            className="text-sky-400 hover:text-sky-300 transition-colors duration-300 cursor-pointer font-medium"
+          >
+            作品
+          </Link>
+          ，
         </motion.p>
         
         <motion.p 
           variants={itemVariants} 
           className="text-sm text-white/70 font-light leading-loose tracking-widest pt-2"
         >
-          你可以随意的探索，感谢你的好奇心
+          感谢访问
         </motion.p>
 
         {/* 

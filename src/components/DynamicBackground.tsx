@@ -19,11 +19,13 @@ import { usePathname } from "next/navigation";
 function CharacterModel() {
   const { scene } = useGLTF("/models/character.glb", "/draco/");
   
-  // 遍历模型并开启投影和接收阴影
+  // 遍历模型并开启投影
   scene.traverse((child) => {
     if (child instanceof THREE.Mesh) {
       child.castShadow = true;
-      child.receiveShadow = true;
+      // 角色头部和面部在逆光时接收自身投影（例如头发在脸上）会产生极为丑陋死黑的面部黑斑（Shadow Self-shadowing）
+      // 业界黄金法则是角色皮肤/头部不接收自阴影，仅产生向地面的投影，以此保证干净温润的面部光影质感
+      child.receiveShadow = false;
     }
   });
 
@@ -357,6 +359,7 @@ function Scene() {
         color="#e2e8f0" // 银白色冷调月光，给模型勾勒出高档冷冽的边缘物理高光
         castShadow 
         shadow-mapSize={[2048, 2048]} 
+        shadow-bias={-0.0005} // 添加阴影偏移，防止地表/碎星采样产生的阴影粉刺（Shadow Acne）和不规则黑斑
         shadow-camera-left={-10}
         shadow-camera-right={10}
         shadow-camera-top={10}
@@ -395,7 +398,7 @@ export function DynamicBackground() {
         background: "#030303" // 彻底还原纯粹、干净、空灵的黑色夜空背景
       }}
     >
-      <Canvas shadows="basic" camera={{ position: [-0.5, 1.8, 6.2], fov: 45 }}>
+      <Canvas shadows camera={{ position: [-0.5, 1.8, 6.2], fov: 45 }}>
         {/* 注入三维运镜轨道管理系统，让 Tab 的切换完美自动联动镜头转换！ */}
         <CameraRig />
         
