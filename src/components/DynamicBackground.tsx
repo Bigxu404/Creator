@@ -379,8 +379,8 @@ function Scene() {
 
       {/* 真实的接触阴影，已迁移合并在 3D 场景 Group 内部定位，这里废弃避免生成怪异的重叠黑横截面 */}
       
-      {/* 环境光反射（HDRI），给予你的模型更好的金属/皮肤光泽反射 */}
-      <Environment preset="night" />
+      {/* 环境光反射（HDRI），给予你的模型更好的金属/皮肤光泽反射（已自托管以解决跨域及加载性能问题） */}
+      <Environment files="/hdri/dikhololo_night_1k.hdr" />
     </>
   );
 }
