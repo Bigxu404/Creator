@@ -84,14 +84,19 @@ function ActualPreloader() {
 
       <div className="flex flex-col items-center space-y-8 text-center max-w-[360px] px-6 relative z-10">
         {/* 顶层美学标志 */}
-        <span className="text-[10px] text-white/20 tracking-[0.35em] uppercase font-serif block pl-[0.35em]">
-          3D Atmosphere // 营地宇宙
+        <span className="text-[10px] text-white/20 tracking-[0.35em] uppercase font-serif block pl-[0.35em] select-none">
+          Xu的作品集
         </span>
         
-        {/* 极简数字加载进度 */}
-        <h1 className="text-4xl md:text-5xl font-extralight font-serif text-white/95 tracking-[0.1em] pl-[0.1em] leading-none">
-          {Math.round(progress)}%
-        </h1>
+        {/* 极简数字加载进度与动态提示 */}
+        <div className="space-y-2 select-none">
+          <h1 className="text-4xl md:text-5xl font-extralight font-serif text-white/95 tracking-[0.1em] pl-[0.1em] leading-none">
+            {Math.round(progress)}%
+          </h1>
+          <span className="text-[9px] text-amber-500/50 tracking-[0.2em] uppercase font-serif block pl-[0.2em] animate-pulse">
+            全力加载中...
+          </span>
+        </div>
 
         {/* 优雅的高级感进度条 */}
         <div className="w-[200px] h-[2px] bg-white/10 rounded-full overflow-hidden relative">
@@ -104,10 +109,9 @@ function ActualPreloader() {
         </div>
 
         {/* 人文提示 */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center select-none">
           <p className="text-[9px] text-white/30 tracking-[0.18em] font-light leading-relaxed pl-[0.18em]">
-            三维慢思考宇宙正在解压载入...<br/>
-            建议配戴耳机以获得最佳声学沉浸体验
+            内容包含较多的文档、链接、图片，需要加载会～
           </p>
         </div>
       </div>
