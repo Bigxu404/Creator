@@ -697,7 +697,7 @@ export default function ExperiencePage() {
                           controls 
                           muted
                           playsInline 
-                          preload="metadata"
+                          preload="none"
                           className="w-full h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-500"
                         />
                       </div>

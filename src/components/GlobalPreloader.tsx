@@ -9,6 +9,26 @@ export function GlobalPreloader() {
 
   useEffect(() => {
     setMounted(true);
+    
+    // 核心性能优化：在加载页还在运行期间，利用浏览器空闲/并行网络通道，提前静默预下载全站所有的重磅图片
+    const criticalImages = [
+      "/neofeed封面.webp",
+      "/trae-solo-ide.webp",
+      "/systemprompt-debug-1.webp",
+      "/systemprompt-debug-2.webp",
+      "/benchmark-test.webp",
+      "/alice-gen-1779610342651.webp",
+      "/AI聊文档-解构与思考.webp",
+      "/独立产品分享Weave：解决你的AI信息焦虑.webp",
+      "/提效思路.webp",
+      "/alice-gen-1779294916502.webp",
+      "/alice-gen-1779295412219.webp"
+    ];
+
+    criticalImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
   }, []);
 
   if (!mounted) {
