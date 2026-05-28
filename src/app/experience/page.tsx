@@ -485,13 +485,13 @@ export default function ExperiencePage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ 
-          duration: 0.8, 
+          duration: 1.3, 
           ease: "easeInOut",
-          delay: 0.45 
+          delay: 0.1 
         }}
-        className="absolute inset-0 bg-[#0d0d0d]/70 backdrop-blur-2xl pointer-events-auto flex items-center justify-center"
+        className="absolute inset-0 bg-[#0d0d0d]/15 backdrop-blur-2xl pointer-events-auto flex items-center justify-center"
       >
-        <div className="max-w-6xl w-full h-[75vh] px-8 md:px-12 mx-auto relative pt-14">
+        <div className="max-w-6xl w-full h-[80vh] md:h-[75vh] px-4 md:px-12 mx-auto relative pt-24 md:pt-14">
           {/* 右侧巨幅内容滚动视窗 (Experience Tab Single Column Layout) */}
           <div 
             className="w-full h-full overflow-y-auto overflow-x-hidden pr-2 space-y-16 scroll-smooth pb-[25vh] hide-scrollbar"

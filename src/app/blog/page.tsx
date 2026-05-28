@@ -20,11 +20,11 @@ export default function BlogPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ 
-          duration: 0.8,
+          duration: 1.3, 
           ease: "easeInOut",
-          delay: 0.45
+          delay: 0.1 
         }}
-        className="w-full min-h-screen bg-[#0d0d0d]/70 backdrop-blur-2xl flex flex-col items-center justify-start pt-24 md:pt-36 pb-24 space-y-12 md:space-y-16"
+        className="w-full min-h-screen bg-[#0d0d0d]/15 backdrop-blur-2xl flex flex-col items-center justify-start pt-24 md:pt-36 pb-24 space-y-12 md:space-y-16"
       >
         {/* 文字板块：置于上方，参考经历（Experience）和作品集（Works）页面的黄金版式 */}
         <div className="flex flex-col items-center justify-center text-center space-y-4 md:space-y-5 w-full max-w-[840px] px-6 select-none">

@@ -8,11 +8,11 @@ import { useState, useRef, useEffect } from "react";
 import { defaultPlaylist, Track } from "@/lib/playlist";
 
 const tabs = [
-  { name: "首页", path: "/", symbol: "♩" },
-  { name: "关于我 About", path: "/about", symbol: "♪" },
-  { name: "工作经历 Experience", path: "/experience", symbol: "♭" },
-  { name: "作品集 Works", path: "/works", symbol: "♫" },
-  { name: "Blog 随笔", path: "/blog", symbol: "♬" },
+  { name: "首页", mobileName: "首页", path: "/", symbol: "♩" },
+  { name: "关于我 About", mobileName: "关于", path: "/about", symbol: "♪" },
+  { name: "工作经历 Experience", mobileName: "经历", path: "/experience", symbol: "♭" },
+  { name: "作品集 Works", mobileName: "作品", path: "/works", symbol: "♫" },
+  { name: "Blog 随笔", mobileName: "Blog", path: "/blog", symbol: "♬" },
 ];
 
 interface LrcLine {
@@ -303,8 +303,8 @@ export function NavigationBar() {
 
   return (
     <>
-      {/* 左侧主导航栏 */}
-      <div className="fixed top-10 left-12 z-50">
+      {/* 1. 【PC 端】左侧主导航栏 (仅在 md 及以上大屏显示) */}
+      <div className="hidden md:block fixed top-10 left-12 z-50">
         <nav className="relative flex items-center gap-8 px-4 pb-2">
           {tabs.map((tab) => {
             const isActive = pathname === tab.path || (pathname.startsWith(tab.path) && tab.path !== "/");
@@ -333,8 +333,38 @@ export function NavigationBar() {
         </nav>
       </div>
 
-      {/* 右侧独立播放控制器栏 */}
-      <div className="fixed top-10 right-12 z-50 flex items-baseline gap-10">
+      {/* 2. 【移动端】底端悬浮高透美学胶囊导航栏 (仅在 md 以下小屏显示) */}
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[390px]">
+        <nav className="flex items-center justify-around py-3 px-3 rounded-full border border-white/[0.04] bg-black/25 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] relative">
+          {tabs.map((tab) => {
+            const isActive = pathname === tab.path || (pathname.startsWith(tab.path) && tab.path !== "/");
+            return (
+              <Link
+                key={tab.path}
+                href={tab.path}
+                className={cn(
+                  "relative text-[11px] tracking-[0.2em] transition-colors duration-300 px-2 py-0.5 flex flex-col items-center gap-1 select-none",
+                  isActive ? "text-white font-medium scale-[1.02]" : "text-white/40 hover:text-white/70"
+                )}
+              >
+                <span className="relative z-10">{tab.mobileName}</span>
+                {isActive && (
+                  <motion.span
+                    layoutId="activeTabNoteMobile"
+                    className="text-[10px] text-white/90 leading-none select-none pointer-events-none"
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                  >
+                    {tab.symbol}
+                  </motion.span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* 3. 【自适应】右侧播放控制器栏 (移动端略微往里、往上缩进以防触及手机屏幕安全边缘) */}
+      <div className="fixed top-6 md:top-10 right-6 md:right-12 z-50 flex items-baseline gap-6 md:gap-10 pointer-events-auto">
         
         <div ref={consoleContainerRef} className="relative flex items-baseline pointer-events-auto">
           <button
@@ -362,13 +392,13 @@ export function NavigationBar() {
 
             {/* 状态与歌名 */}
             <span className="text-[10px] text-white/35 tracking-[0.15em] font-light group-hover:text-white/80 transition-colors duration-500 flex items-baseline gap-1.5 leading-none">
-              <span className="max-w-[120px] truncate uppercase">{currentTrack ? currentTrack.title : "LOADING..."}</span>
+              <span className="max-w-[80px] sm:max-w-[120px] truncate uppercase">{currentTrack ? currentTrack.title : "LOADING..."}</span>
               <span className="text-[8px] text-white/20 relative top-[-1.5px] font-serif">//</span>
               <span className="text-[8px] text-white/40">{isPlaying ? "ON" : "MUTED"}</span>
             </span>
           </button>
 
-          {/* 唱片控制台卡片 */}
+          {/* 唱片控制台卡片 (添加响应式宽度，防止在超窄手机屏上溢出) */}
           <AnimatePresence>
             {showConsole && currentTrack && (
               <motion.div
@@ -376,7 +406,7 @@ export function NavigationBar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 15, scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute right-0 top-10 w-[300px] p-5 rounded-xl border border-white/5 bg-[#0a0a0a]/90 backdrop-blur-3xl shadow-2xl flex flex-col gap-4 select-none z-50"
+                className="absolute right-0 top-10 w-[280px] sm:w-[300px] p-5 rounded-xl border border-white/5 bg-[#0a0a0a]/90 backdrop-blur-3xl shadow-2xl flex flex-col gap-4 select-none z-50"
               >
                 {/* 唱片旋转动效 */}
                 <div className="flex items-center gap-4">
@@ -493,7 +523,7 @@ export function NavigationBar() {
           </AnimatePresence>
         </div>
 
-        {/* 联系我 Contact 按钮 */}
+        {/* 联系我 Contact 按钮 (PC 端显示完整文本，移动端缩写为极简的 Contact 文本并往上提) */}
         <Link
           href="/contact"
           className={cn(
@@ -501,7 +531,8 @@ export function NavigationBar() {
             isContactActive ? "text-white font-medium" : "text-white/35 hover:text-white/80"
           )}
         >
-          <span className="relative z-10 pb-1">联系我 Contact</span>
+          <span className="relative z-10 pb-1 hidden sm:inline">联系我 Contact</span>
+          <span className="relative z-10 pb-1 sm:hidden text-[10px]">Contact</span>
           {isContactActive && (
             <motion.div
               layoutId="activeContactBead"

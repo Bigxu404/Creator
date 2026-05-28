@@ -11,13 +11,13 @@ export default function AboutPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ 
-          duration: 0.8, 
+          duration: 1.3, 
           ease: "easeInOut",
-          delay: 0.45 
+          delay: 0.1 
         }}
-        className="absolute inset-0 bg-[#0d0d0d]/70 backdrop-blur-2xl pointer-events-auto flex items-center justify-center"
+        className="absolute inset-0 bg-[#0d0d0d]/15 backdrop-blur-2xl pointer-events-auto flex items-center justify-center"
       >
-        <div className="max-w-6xl w-full h-[75vh] px-8 md:px-12 mx-auto relative pt-14">
+        <div className="max-w-6xl w-full h-full md:h-[75vh] overflow-y-auto md:overflow-hidden px-4 md:px-12 mx-auto relative pt-24 md:pt-14 hide-scrollbar pb-[15vh] md:pb-0">
           
           {/* 
             两栏排版（独立滚动视窗）：
@@ -36,7 +36,7 @@ export default function AboutPage() {
 
             {/* 左侧：画廊级平铺探索视窗 (8/12 宽度，在桌面端右侧加上极为内敛的细分割线) */}
             <div 
-              className="md:col-span-8 h-full overflow-y-auto pr-6 md:pr-12 space-y-12 scroll-smooth pb-[15vh] hide-scrollbar md:border-r md:border-white/[0.04]"
+              className="md:col-span-8 h-auto md:h-full overflow-visible md:overflow-y-auto pr-0 md:pr-12 space-y-12 scroll-smooth pb-0 md:pb-[15vh] hide-scrollbar md:border-r md:border-white/[0.04]"
               style={{
                 scrollbarWidth: "none", // Firefox 隐藏滚动条
                 msOverflowStyle: "none" // IE 隐藏滚动条
@@ -213,7 +213,7 @@ export default function AboutPage() {
 
             {/* 右侧：集中图片区域 (4/12 宽度，独立垂直滚动，增加 md:pl-10 微微将画卷整体往右侧推移) */}
             <div 
-              className="md:col-span-4 h-full overflow-y-auto pr-2 md:pl-10 space-y-6 scroll-smooth pb-[15vh] hide-scrollbar flex flex-col items-start"
+              className="md:col-span-4 h-auto md:h-full overflow-visible md:overflow-y-auto pr-0 md:pl-10 space-y-8 scroll-smooth pb-[5vh] md:pb-[15vh] hide-scrollbar flex flex-col items-center md:items-start mt-12 md:mt-0"
               style={{
                 scrollbarWidth: "none", // Firefox 隐藏滚动条
                 msOverflowStyle: "none" // IE 隐藏滚动条

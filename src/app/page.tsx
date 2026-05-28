@@ -30,7 +30,7 @@ export default function Home() {
   };
 
   return (
-    <main className="w-screen h-screen relative flex items-start justify-start pl-16 pt-[200px] pointer-events-none">
+    <main className="w-screen h-screen relative flex items-start justify-start pl-6 md:pl-16 pt-[120px] md:pt-[200px] pointer-events-none">
       {/* 
         高定主页文字介绍：
         完美的极简主义排版，与左上角的导航栏在 X 轴上绝对对齐。
@@ -41,7 +41,7 @@ export default function Home() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="max-w-[480px] space-y-6 pointer-events-auto select-none"
+        className="max-w-[90%] md:max-w-[480px] space-y-5 md:space-y-6 pointer-events-auto select-none"
       >
         <motion.p 
           variants={itemVariants} 

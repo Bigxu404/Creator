@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useProgress } from "@react-three/drei";
 
 export function GlobalPreloader() {
   const [mounted, setMounted] = useState(false);
@@ -10,7 +9,7 @@ export function GlobalPreloader() {
   useEffect(() => {
     setMounted(true);
     
-    // 核心性能优化：在加载页还在运行期间，利用浏览器空闲/并行网络通道，提前静默预下载全站所有的重磅图片
+    // 核心性能优化：在加载页短暂闪现期间，利用浏览器空闲通道，提前静默预下载全站重要的图片
     const criticalImages = [
       "/neofeed封面.webp",
       "/trae-solo-ide.webp",
@@ -42,31 +41,40 @@ export function GlobalPreloader() {
 }
 
 function ActualPreloader() {
-  const { active, progress, total } = useProgress();
+  const [progress, setProgress] = useState(0);
   const [showLoader, setShowLoader] = useState(true);
   const [shouldRender, setShouldRender] = useState(true);
 
   useEffect(() => {
-    // 当没有正在加载的资源，且加载进度达到 100% 或当前无需加载任何资源 (total === 0) 时触发淡出
-    if (!active && (progress === 100 || total === 0)) {
-      // 稍作延迟，保障 Three.js 材质、着色器编译就绪，达到极致顺畅的无缝淡入效果
-      const timer = setTimeout(() => setShowLoader(false), 850);
-      return () => clearTimeout(timer);
-    }
-  }, [active, progress, total]);
+    // 模拟极致顺滑的、电影级的开场进度条加载（450ms 黄金加载耗时，极致提速）
+    let startTimestamp: number | null = null;
+    const duration = 450; // 450毫秒完成 0 -> 100 的飞跃
 
-  // 安全时间触发隐藏
-  useEffect(() => {
-    const safetyTimer = setTimeout(() => {
-      setShowLoader(false);
-    }, 6000);
-    return () => clearTimeout(safetyTimer);
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const elapsed = timestamp - startTimestamp;
+      const progressRatio = Math.min(elapsed / duration, 1);
+      
+      // 使用三次方缓动曲线（EaseOutCubic），让数字具有自然惯性，越到后面越慢，从而显得极其丝滑有机
+      const easeProgress = 1 - Math.pow(1 - progressRatio, 3);
+      setProgress(easeProgress * 100);
+
+      if (progressRatio < 1) {
+        requestAnimationFrame(step);
+      } else {
+        // 加载完成，稍作延迟，保障页面首屏图片渲染，达到极致顺畅的无缝淡入效果
+        const timer = setTimeout(() => setShowLoader(false), 200);
+        return () => clearTimeout(timer);
+      }
+    };
+
+    requestAnimationFrame(step);
   }, []);
 
   // 卸载延迟，给 CSS 渐变动画留出富余时间
   useEffect(() => {
     if (!showLoader) {
-      const timer = setTimeout(() => setShouldRender(false), 1200);
+      const timer = setTimeout(() => setShouldRender(false), 1000);
       return () => clearTimeout(timer);
     }
   }, [showLoader]);
@@ -104,7 +112,7 @@ function ActualPreloader() {
             className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)]"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.05, ease: "easeOut" }}
           />
         </div>
 
