@@ -16,9 +16,9 @@ export function DynamicBackground() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       // 计算鼠标相对于屏幕中心的位置百分比
-      const { clientWidth, clientHeight } = window;
-      const targetX = (e.clientX - clientWidth / 2) / (clientWidth / 2);
-      const targetY = (e.clientY - clientHeight / 2) / (clientHeight / 2);
+      const { innerWidth: width, innerHeight: height } = window;
+      const targetX = (e.clientX - width / 2) / (width / 2);
+      const targetY = (e.clientY - height / 2) / (height / 2);
       
       // 控制微弱的视差幅度（最大移动 15px），防止晃眼且确保边缘不会穿帮
       mouseX.set(targetX * -15);
