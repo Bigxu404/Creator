@@ -489,7 +489,7 @@ export default function ExperiencePage() {
           ease: "easeInOut",
           delay: 0.1 
         }}
-        className="absolute inset-0 bg-[#0d0d0d]/15 backdrop-blur-2xl pointer-events-auto flex items-center justify-center"
+        className="absolute inset-0 pointer-events-auto flex items-center justify-center"
       >
         <div className="max-w-6xl w-full h-[80vh] md:h-[75vh] px-4 md:px-12 mx-auto relative pt-24 md:pt-14">
           {/* 右侧巨幅内容滚动视窗 (Experience Tab Single Column Layout) */}

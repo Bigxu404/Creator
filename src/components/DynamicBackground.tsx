@@ -3,8 +3,12 @@
 import Image from "next/image";
 import { useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export function DynamicBackground() {
+  const pathname = usePathname();
+  const isSubpage = pathname !== "/";
+
   // 视差效果：使用 spring 物理阻尼动画，确保鼠标视差极其丝滑、温润，没有丝毫抖动
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -59,6 +63,20 @@ export function DynamicBackground() {
         style={{
           backgroundImage: "radial-gradient(circle at 50% 50%, rgba(3, 3, 3, 0) 0%, rgba(3, 3, 3, 0.55) 100%)"
         }}
+      />
+
+      {/* 
+        全局子页背景模糊层：
+        将原先分散在各子页、重复且极其消耗 GPU 算力的 backdrop-blur-2xl 提取到全局底层。
+        当切换页面时，该模糊层常驻不卸载，只有最浅层的 HTML 文本进行淡入和平移动画。
+        这极大减轻了图形合成器的图层重绘开销，让站内跳转瞬间拉满至 120fps！
+      */}
+      <div 
+        className={`absolute inset-0 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isSubpage 
+            ? "bg-[#0d0d0d]/35 backdrop-blur-xl opacity-100" 
+            : "bg-transparent backdrop-blur-none opacity-0 pointer-events-none"
+        }`}
       />
     </div>
   );

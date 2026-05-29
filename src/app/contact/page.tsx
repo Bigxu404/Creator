@@ -51,7 +51,7 @@ export default function ContactPage() {
           ease: "easeInOut",
           delay: 0.1 
         }}
-        className="absolute inset-0 bg-[#0d0d0d]/15 backdrop-blur-2xl pointer-events-auto flex items-center justify-center overflow-y-auto pt-20 pb-10"
+        className="absolute inset-0 pointer-events-auto flex items-center justify-center overflow-y-auto pt-20 pb-10"
       >
         <div className="max-w-[480px] w-full text-center space-y-8 px-6 select-none flex flex-col items-center">
           <div className="space-y-3">
