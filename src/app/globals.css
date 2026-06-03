@@ -160,3 +160,18 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* ==========================================
+   Safari 浏览器 backdrop-filter (毛玻璃) 兼容性补丁
+   ========================================== */
+[class*="backdrop-blur"] {
+  -webkit-backdrop-filter: var(--webkit-backdrop-blur, none);
+}
+
+.backdrop-blur-sm { --webkit-backdrop-blur: blur(4px); }
+.backdrop-blur-md { --webkit-backdrop-blur: blur(8px); }
+.backdrop-blur-lg { --webkit-backdrop-blur: blur(16px); }
+.backdrop-blur-xl { --webkit-backdrop-blur: blur(24px); }
+.backdrop-blur-2xl { --webkit-backdrop-blur: blur(40px); }
+.backdrop-blur-3xl { --webkit-backdrop-blur: blur(64px); }
+

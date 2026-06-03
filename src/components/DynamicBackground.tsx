@@ -50,6 +50,7 @@ export function DynamicBackground() {
           priority
           unoptimized
           className="object-cover opacity-85 filter saturate-[0.95] contrast-[1.02]"
+          style={{ transform: "translate3d(0, 0, 0)" }}
         />
       </motion.div>
 

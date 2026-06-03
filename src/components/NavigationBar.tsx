@@ -20,6 +20,28 @@ interface LrcLine {
   text: string;
 }
 
+// 解决 Safari 等浏览器下 HTMLMediaElement.play() 可能返回 undefined 导致链式调用 .then()/.catch() 崩溃的兼容性辅助函数
+const safePlay = (audio: HTMLAudioElement | null, callback?: () => void) => {
+  if (!audio) return;
+  try {
+    const playPromise = audio.play();
+    if (playPromise !== undefined && typeof playPromise.then === "function") {
+      playPromise
+        .then(() => {
+          if (callback) callback();
+        })
+        .catch((error) => {
+          console.log("音频播放被阻止或中断:", error);
+        });
+    } else {
+      // 如果返回 undefined（老版本 Safari），则直接执行回调
+      if (callback) callback();
+    }
+  } catch (error) {
+    console.error("播放音频出错:", error);
+  }
+};
+
 export function NavigationBar() {
   const pathname = usePathname();
   const isContactActive = pathname === "/contact";
@@ -103,7 +125,7 @@ export function NavigationBar() {
     audio.addEventListener("ended", handleEnded);
 
     if (isPlaying) {
-      audio.play().catch(() => {});
+      safePlay(audio);
     }
 
     // 加载歌词
@@ -128,7 +150,7 @@ export function NavigationBar() {
   useEffect(() => {
     if (!isMounted || !audioRef.current) return;
     if (isPlaying) {
-      audioRef.current.play().catch(() => {});
+      safePlay(audioRef.current);
     } else {
       audioRef.current.pause();
     }
@@ -216,9 +238,7 @@ export function NavigationBar() {
     const handleFirstInteraction = () => {
       if (!active) return;
       if (audioRef.current && isPlaying) {
-        audioRef.current.play()
-          .then(() => setIsPlaying(true))
-          .catch(() => {});
+        safePlay(audioRef.current, () => setIsPlaying(true));
       }
       cleanup();
     };
@@ -233,7 +253,7 @@ export function NavigationBar() {
     document.addEventListener("touchstart", handleFirstInteraction);
 
     if (audioRef.current && isPlaying) {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      safePlay(audioRef.current, () => setIsPlaying(true));
     }
 
     return cleanup;

@@ -848,6 +848,111 @@ export default function ExperiencePage() {
                 </div>
               </div>
 
+              {/* 实践经历与分享 (Hackathons & AI Sharing) */}
+              <div className="w-full pt-16 border-t border-white/[0.03]">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-0 items-start">
+                  {/* Left Column: Text content */}
+                  <div className="md:col-span-8 space-y-4 text-left md:pr-12 md:border-r md:border-white/[0.04]">
+                    <div className="flex items-baseline space-x-3 text-white pb-2.5 border-b border-white/[0.03]">
+                      <span className="text-base font-serif font-light text-white/30">05 /</span>
+                      <h3 className="text-base text-white font-semibold tracking-[0.12em]">
+                        在实践中探索前沿 - 黑客松与 AI 社区分享
+                      </h3>
+                    </div>
+                    
+                    <div className="space-y-6 text-xs leading-relaxed tracking-[0.15em] font-light font-sans text-white/60">
+                      <div className="space-y-1.5">
+                        <span className="text-[12px] md:text-[13px] text-white/50 font-medium tracking-[0.15em] block uppercase select-none font-sans">
+                          一句话总结
+                        </span>
+                        <p className="text-white/70 text-[13px] font-light leading-relaxed">
+                          保持对技术最敏锐的嗅觉，通过参加黑客松（Hackathon）和在 AI 社区分享，将前沿的 AI 思考转化为可落地的有趣作品。
+                        </p>
+                      </div>
+
+                      <div className="space-y-4 pt-4 border-t border-white/[0.03]">
+                        <span className="text-[12px] md:text-[13px] text-white/50 font-medium tracking-[0.15em] block uppercase select-none font-sans">
+                          核心实践经历
+                        </span>
+
+                        {/* 实践 1: 黑客松 */}
+                        <div className="space-y-2">
+                          <p className="text-white/80 text-[13px] font-medium leading-relaxed">
+                            1. AI 黑客松实践：从创意到高保真 Demo
+                          </p>
+                          <p className="text-white/70 text-[13px] font-light leading-relaxed pl-4">
+                            多次参与并主导 AI 主题黑客松，在 48 小时内完成从痛点定义、产品定位、Prompt 编排到可交互前端 Demo 的极限交付。通过手搓 HTML 原型与 Agent 链路，验证前沿 AI 场景的商业与用户价值。
+                          </p>
+                          <blockquote className="border-l border-amber-500/30 pl-4 py-1.5 text-white/40 text-[12px] font-light italic leading-relaxed bg-white/[0.01] rounded-r-md">
+                            “黑客松是检验‘Vibe Coding’和‘AI Native 产品设计’的最佳战场。它逼迫我们在极短时间内，用最直观、最自然的交互（LUI + GUI 结合）去解决一个真实存在的痛点。”
+                          </blockquote>
+                        </div>
+
+                        {/* 实践 2: AI 分享 */}
+                        <div className="space-y-2">
+                          <p className="text-white/80 text-[13px] font-medium leading-relaxed">
+                            2. 社区分享与布道：传播 AI 提效方法论
+                          </p>
+                          <p className="text-white/70 text-[13px] font-light leading-relaxed pl-4">
+                            在团队内部及 AI 开发者社区分享关于“AI IDE（如 Cursor/Trae）如何重塑产品经理工作流”、“Agent 架构设计中的 Context 隔离与 Trace 实践”等主题。通过输出沉淀，帮助更多非研发背景的产品人跨越技术鸿沟。
+                          </p>
+                          <blockquote className="border-l border-amber-500/30 pl-4 py-1.5 text-white/40 text-[12px] font-light italic leading-relaxed bg-white/[0.01] rounded-r-md">
+                            “分享的本质是自我内化。当我们把复杂的 Agent 运行机制、System Prompt 调优经验，用最通俗易懂的语言和案例讲给别人听时，我们自己对 AI 边界的认知也会变得更加清晰。”
+                          </blockquote>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Visuals */}
+                  <div className="md:col-span-4 flex flex-col items-center md:pl-12 self-start pt-16 space-y-12">
+                    {/* 黑客松作品展示 */}
+                    <div className="w-full max-w-[280px] space-y-3">
+                      <div className="flex items-center space-x-2 select-none pb-1 w-full pl-0.5">
+                        <span className="text-[10px] text-amber-500 font-semibold tracking-[0.15em] block uppercase select-none font-sans">
+                          黑客松作品与路演
+                        </span>
+                        <div className="h-[1px] flex-1 bg-gradient-to-r from-amber-500/25 to-transparent" />
+                      </div>
+
+                      <div className="w-full aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-white/[0.01] shadow-xl relative group/hackathon">
+                        <div className="w-full h-full bg-gradient-to-br from-amber-950/20 to-black/80 flex flex-col items-center justify-center p-4 text-center">
+                          <span className="text-[24px] mb-2">🏆</span>
+                          <h4 className="text-white/90 text-xs font-medium tracking-wider">AI Hackathon</h4>
+                          <p className="text-white/40 text-[10px] mt-1 tracking-widest leading-relaxed">
+                            48H 极限挑战<br />
+                            AI 智能体应用创新奖
+                          </p>
+                        </div>
+                        <div className="absolute inset-0 bg-amber-950/10 opacity-0 group-hover/hackathon:opacity-100 transition-opacity duration-500" />
+                      </div>
+                    </div>
+
+                    {/* AI分享内容 */}
+                    <div className="w-full max-w-[280px] space-y-3">
+                      <div className="flex items-center space-x-2 select-none pb-1 w-full pl-0.5">
+                        <span className="text-[10px] text-amber-500 font-semibold tracking-[0.15em] block uppercase select-none font-sans">
+                          AI 提效与实践分享
+                        </span>
+                        <div className="h-[1px] flex-1 bg-gradient-to-r from-amber-500/25 to-transparent" />
+                      </div>
+
+                      <div className="w-full aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-white/[0.01] shadow-xl relative group/sharing">
+                        <div className="w-full h-full bg-gradient-to-br from-sky-950/20 to-black/80 flex flex-col items-center justify-center p-4 text-center">
+                          <span className="text-[24px] mb-2">🎤</span>
+                          <h4 className="text-white/90 text-xs font-medium tracking-wider">布道与分享</h4>
+                          <p className="text-white/40 text-[10px] mt-1 tracking-widest leading-relaxed">
+                            “AI 时代的个体提效”<br />
+                            Cursor / Trae 最佳实践
+                          </p>
+                        </div>
+                        <div className="absolute inset-0 bg-sky-950/10 opacity-0 group-hover/sharing:opacity-100 transition-opacity duration-500" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

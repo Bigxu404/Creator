@@ -49,6 +49,8 @@ function ActualPreloader() {
     // 模拟极致顺滑的、电影级的开场进度条加载（450ms 黄金加载耗时，极致提速）
     let startTimestamp: number | null = null;
     const duration = 450; // 450毫秒完成 0 -> 100 的飞跃
+    let animFrameId: number;
+    let timerId: NodeJS.Timeout;
 
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
@@ -60,15 +62,27 @@ function ActualPreloader() {
       setProgress(easeProgress * 100);
 
       if (progressRatio < 1) {
-        requestAnimationFrame(step);
+        animFrameId = requestAnimationFrame(step);
       } else {
         // 加载完成，稍作延迟，保障页面首屏图片渲染，达到极致顺畅的无缝淡入效果
-        const timer = setTimeout(() => setShowLoader(false), 200);
-        return () => clearTimeout(timer);
+        timerId = setTimeout(() => setShowLoader(false), 200);
       }
     };
 
-    requestAnimationFrame(step);
+    animFrameId = requestAnimationFrame(step);
+
+    // 🌟 兜底安全锁 (Fail-safe)：无论 requestAnimationFrame 是否被 Safari 挂起、节流或处于后台，
+    // 都在 800ms 后强制完成加载并关闭 Preloader，确保用户 100% 能够看到网页内容！
+    const failSafeTimer = setTimeout(() => {
+      setProgress(100);
+      setShowLoader(false);
+    }, 800);
+
+    return () => {
+      cancelAnimationFrame(animFrameId);
+      if (timerId) clearTimeout(timerId);
+      clearTimeout(failSafeTimer);
+    };
   }, []);
 
   // 卸载延迟，给 CSS 渐变动画留出富余时间
